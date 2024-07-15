@@ -27,10 +27,11 @@ void add_median(t_stack *a)
 	}
 }
 
-void find_target_node(t_stack *a, t_stack *b)
+void find_target_node(t_stack *a, t_stack *b)//need to find biggest node so i can attack to that if there is no smaller node
 {
     t_stack *btemp;
     t_stack *b_start;
+	t_stack *biggest;
 
 	if (!a || !b)
 		return;
@@ -99,23 +100,34 @@ void calc_cheapest(t_stack *a)
 	cheapest->cheapest = 1;
 }
 
-
-
 void calc_push_cost(t_stack *a)
 {
 	if (!a)
 		return ;
 	while (a)
 	{
-		if (a->above_median)
-			a->push_cost = a->index + a->target_node->index;
-		else
-			a->push_cost = a->max_index - a->index + 1;
+		if (a->above_median && a->target_node->above_median)
+		{
+			if (a->index > a->target_node->index)
+				a->push_cost = a->index;
+			else
+				a->push_cost = a->target_node->index;
+		}	
+		else if (a->above_median == 0 && a->target_node->above_median == 0)
+		{
+			if (a->index < a->target_node->index)
+				a->push_cost = a->max_index - a->index + 1;
+			else
+				a->push_cost = a->max_index - a->target_node->index + 1;
+		}
+		else if (a->above_median == 1 && a->target_node->above_median == 0)
+			a->push_cost = a->index + a->target_node->max_index - a->target_node->index + 1;
+		else if (a->above_median == 0 && a->target_node->above_median == 1)
+			a->push_cost = a->max_index - a->index + a->target_node->index + 1;
+			
 		a = a->next;
 	}
 }
-
-
 
 void update_node_info(t_stack *a, t_stack *b)
 {

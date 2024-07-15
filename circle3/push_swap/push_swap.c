@@ -97,13 +97,13 @@ void push_to_b(t_stack **a, t_stack **b)
 			pb(a, b);
     		update_node_info(*a, *b);
 		}
-        else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && (current_a->index != 0 || current_a->target_node->index != 0))
+        else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
         {
             trouble(*a, *b);
             rr(a, b);
 			update_node_info(*a, *b);
         }
-        else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && (current_a->index != 0 || current_a->target_node->index != 0))
+        else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
         {
             trouble(*a, *b);
             rrr(a, b);
