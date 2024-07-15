@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "random": "c",
+        "*.tcc": "c",
+        "push_swap.h": "c"
+    }
+}
