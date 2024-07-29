@@ -35,108 +35,127 @@ t_stack *insert_num(t_stack *a, int argc, char **argv)
 	i = 1;
 	while(i < argc && a != NULL)
 	{
-		a->num = atoi(argv[i]);//exchange atoi for ft_atoi
+		a->num = atoi(argv[i]);//TODO: exchange atoi for ft_atoi
 		i++;
 		a = a->next;
 	}
 	return(start);
 }
 
-void rotate2top(t_stack **a, t_stack **b)
+void b_max_on_top(t_stack **a, t_stack **b)
 {
-    while (*a && (*a)->index != 0 && *b && (*b)->index != 0) 
+	t_stack *b_max;
+	t_stack *b_start;
+
+	b_start = *b;
+	b_max = *b;
+	while ((*b) != NULL)
 	{
-        rr(a, b);
-        update_node_info(*a, *b);
-    }
-    while (*a && (*a)->index != 0) 
+		if ((*b)->num > b_max->num)
+			b_max = *b;
+		*b = (*b)->next;
+	}
+	*b = b_start;
+	while (b_max->index != 0)
 	{
-        ra(a);
-        update_node_info(*a, *b);
-		show_full_node(*a);
-		show_full_node(*b);
-    }
-    while (*b && (*b)->index != 0) 
-	{
-        rb(b);
-        update_node_info(*a, *b);
-    }
+		if (b_max->above_median)
+			rb(b);
+		if (!(b_max->above_median))
+			rrb(b);
+		update_node_info(*a, *b);
+	}
 }
 
-void rotate2bottom(t_stack **a, t_stack **b)
+t_stack *get_last_node(t_stack *a)
 {
-    while (*a && (*a)->index != 0 && *b && (*b)->index != 0) {
-        rrr (a, b);
-        update_node_info(*a, *b);
-    }
-    while (*a && (*a)->index != 0) {
-        rra(a);
-        update_node_info(*a, *b);
-    }
-    while (*b && (*b)->index != 0) {
-        rrb(b);
-        update_node_info(*a, *b);
-    }
+	while(a->next != NULL)
+		a = a->next;
+	return (a);
 }
+
+t_stack *get_max_num(t_stack *a)
+{
+	t_stack *a_max;
+
+	a_max = a;
+	while(a->next != NULL)
+	{
+		if (a_max->num < a->num)
+			a_max = a;
+		a = a->next;
+	}
+	return (a);
+}
+
+void push_to_a(t_stack **a, t_stack **b)
+{
+	t_stack *a_last;
+
+	a_last = get_last_node(*a);
+	while ((*b)->num > a_last->num)
+	{
+		pa(a, b);
+		if ((*b)->num < a_last->num)
+		{
+			rra(a);
+			a_last = get_last_node(*a);
+		}
+	}
+	while((*b)!= NULL)
+		pa(a, b);
+}
+
+
+void sort_3(t_stack **a)
+{
+	if ((*a)->num < (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+		return;
+	else if ((*a)->num < (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+		rra(a);
+	else if ((*a)->num > (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+		ra(a);
+	else if ((*a)->num > (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+	{
+		sa(a);
+		rra(a);
+	}
+	else if ((*a)->num < (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+	{
+		sa(a);
+		ra(a);
+	}
+	else if ((*a)->num > (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+		sa(a);
+}
+
 
 void push_to_b(t_stack **a, t_stack **b)
 {
     t_stack *current_a;
 
     if (*b == NULL)
-        pb(a, b);
-   
-    while ((*a)->max_index != 2)
+		pb(a, b);
+	while ((*a)->max_index != 2)
     {
         current_a = *a;
-        while (current_a->cheapest != 1 && current_a != NULL)
-            current_a = current_a->next;
+		while (current_a->cheapest != 1 && current_a != NULL)
+			current_a = current_a->next;
 		if (current_a->index == 0 && current_a->target_node->index == 0)
-        {
-			trouble(*a, *b);
 			pb(a, b);
-    		update_node_info(*a, *b);
-		}
-        else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
-        {
-            trouble(*a, *b);
-            rr(a, b);
-			update_node_info(*a, *b);
-        }
-        else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
-        {
-            trouble(*a, *b);
-            rrr(a, b);
-			update_node_info(*a, *b);
-        }
-        else if (current_a->above_median == 1 && current_a->index != 0)
-        {
-            trouble(*a, *b);
-            ra(a);
-			update_node_info(*a, *b);
-        }
+		else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
+			rr(a, b);
+		else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
+    		rrr(a, b);
+		else if (current_a->above_median == 1 && current_a->index != 0)
+        	ra(a);
         else if (current_a->above_median == 0 && current_a->index != 0)
-        {
-            trouble(*a, *b);
-            rra(a);
-			update_node_info(*a, *b);
-        }
+        	rra(a);
         else if (current_a->target_node->above_median == 1 && current_a->target_node->index != 0)
-        {
-            trouble(*a, *b);
-            rb(b);
-			update_node_info(*a, *b);
-        }
-        else if (current_a->target_node->above_median == 0 && current_a->target_node->index != 0)
-        {
-            trouble(*a, *b);
-            rrb(b);
-			update_node_info(*a, *b);
-        }
-        update_node_info(*a, *b);
- 
-    }
-   
+        	rb(b);
+		else if (current_a->target_node->above_median == 0 && current_a->target_node->index != 0)
+        	rrb(b);
+		update_node_info(*a, *b);
+	}
 }
 
 
@@ -154,32 +173,15 @@ int main (int argc, char **argv)
 	while (++i < argc)
 		a = add_node(a);
 	a = insert_num(a,argc,argv);
-	
-	pb(&a,&b);
-	update_node_info(a, b);
-	/*sa(&a);
-	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);
-	ra(&a);
-	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);
-	rra(&a);
-	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);
-	pb(&a,&b);
-	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);*/
+
 	push_to_b(&a, &b);
+//	trouble(a, b);
+	sort_3(&a);
 	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);
-	/*push_to_b(&a, &b);
-	update_node_info(a, b);
-	show_full_node(a);
-	show_full_node(b);*/
+//	trouble(a, b);
+//	b_max_on_top(&a, &b);
+//	trouble(a, b);
+//	push_to_a(&a, &b);
+//	trouble(a, b);
 }
 

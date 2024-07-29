@@ -27,30 +27,33 @@ void add_median(t_stack *a)
 	}
 }
 
-void find_target_node(t_stack *a, t_stack *b)//need to find biggest node so i can attack to that if there is no smaller node
+void find_target_node(t_stack *a, t_stack *b)
 {
     t_stack *btemp;
-    t_stack *b_start;
-	t_stack *biggest;
+    t_stack *b_curr;
+	t_stack *bmax;
 
 	if (!a || !b)
 		return;
     while (a)
     {
         btemp = NULL;
-        b_start = b;
-        while (b_start)
+        b_curr = b;
+		bmax = b;
+        while (b_curr)
         {
-            if (b_start->num < a->num)
+            if (b_curr->num < a->num)
             {
-                if (!btemp || b_start->num > btemp->num)
-            		btemp = b_start;
+                if (!btemp || b_curr->num > btemp->num)
+            		btemp = b_curr;
             }
-            b_start = b_start->next;
+			if (bmax->num < b_curr->num)
+				bmax = b_curr;
+            b_curr = b_curr->next;
         }
         if (!btemp)
-        	btemp = b;
-        a->target_node = btemp;
+		   	btemp = bmax;
+		a->target_node = btemp;
         a = a->next;
     }
 }
