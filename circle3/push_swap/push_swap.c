@@ -87,19 +87,22 @@ t_stack *get_max_num(t_stack *a)
 	return (a);
 }
 
-void push_to_a(t_stack **a, t_stack **b)
+void push_to_a(t_stack **a, t_stack **b)//TODO: there is an error here where the stack a numbers dont get rotated
 {
 	t_stack *a_last;
 
 	a_last = get_last_node(*a);
 	while ((*b)->num > a_last->num)
 	{
-		pa(a, b);
 		if ((*b)->num < a_last->num)
 		{
 			rra(a);
 			a_last = get_last_node(*a);
 		}
+		pa(a, b);
+		//remove this,its for testing
+		printf("");
+		trouble(*a, *b);
 	}
 	while((*b)!= NULL)
 		pa(a, b);
@@ -145,12 +148,12 @@ void push_to_b(t_stack **a, t_stack **b)
 		else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
 			rr(a, b);
 		else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
-    		rrr(a, b);
+		rrr(a, b);
 		else if (current_a->above_median == 1 && current_a->index != 0)
         	ra(a);
-        else if (current_a->above_median == 0 && current_a->index != 0)
+		else if (current_a->above_median == 0 && current_a->index != 0)
         	rra(a);
-        else if (current_a->target_node->above_median == 1 && current_a->target_node->index != 0)
+		else if (current_a->target_node->above_median == 1 && current_a->target_node->index != 0)
         	rb(b);
 		else if (current_a->target_node->above_median == 0 && current_a->target_node->index != 0)
         	rrb(b);
@@ -175,13 +178,16 @@ int main (int argc, char **argv)
 	a = insert_num(a,argc,argv);
 
 	push_to_b(&a, &b);
-//	trouble(a, b);
+	printf("After Push to B:");
+	trouble(a, b);
 	sort_3(&a);
 	update_node_info(a, b);
-//	trouble(a, b);
-//	b_max_on_top(&a, &b);
-//	trouble(a, b);
-//	push_to_a(&a, &b);
-//	trouble(a, b);
+	printf("After sort3:");
+	trouble(a, b);
+	b_max_on_top(&a, &b);
+	printf("After b_max_on_top:");
+	trouble(a, b);
+	push_to_a(&a, &b);
+	printf("After push_to_a:");
+	trouble(a, b);
 }
-
