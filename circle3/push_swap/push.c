@@ -1,56 +1,29 @@
 #include "push_swap.h"
 
-void pa(t_stack **a, t_stack **b)
+void	pa(t_stack **a, t_stack **b)
 {
-    t_stack *b_top;
-
-    if (!b || !(*b))
-		return;
-    b_top = *b;
-    *b = (*b)->next;
-		if (*b)
-		(*b)->prev = NULL;
-    b_top->next = *a;
-		if (*a)
-		(*a)->prev = b_top;
-    *a = b_top;
-    update_node_info(*a, *b);
-    write(1, "pa\n", 3);
-}
-
-/*void pa(t_stack **a,t_stack **b)
-{
-	t_stack *b_start;
+	t_stack	*b_top;
 
 	if (!b || !(*b))
-		return;
-	if ((*b)->next == NULL)
-	{
-		(*a)->prev = *b;
-		(*b)->next = *a;
+		return ;
+	b_top = *b;
+	*b = (*b)->next;
+	if (*b)
 		(*b)->prev = NULL;
-		*a = *b;
-		*b = NULL;
-	}
-	else
-	{
-		b_start = (*a)->next;
-		(*b)->next->prev = NULL;
-		(*a)->prev = *b;
-		(*b)->next = *a;
-		*a = *b;
-		*a = b_start;
-	}
+	b_top->next = *a;
+	if (*a)
+		(*a)->prev = b_top;
+	*a = b_top;
 	update_node_info(*a, *b);
-	write(1,"pa\n",3);
-}*/
+	write(1, "pa\n", 3);
+}
 
-void pb(t_stack **a,t_stack **b)
+void	pb(t_stack **a,t_stack **b)
 {
-	t_stack *a_start;
+	t_stack	*a_start;
 
 	if (!a || !(*a))
-		return;
+		return ;
 	if (!b || !(*b))
 	{
 		a_start = (*a)->next;
