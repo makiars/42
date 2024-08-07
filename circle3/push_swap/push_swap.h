@@ -21,6 +21,7 @@ void	update_node_info(t_stack *a, t_stack *b);
 # include <stdlib.h>
 # include <stdio.h>
 # include "nodeinfo.c"
+# include "nodeinfo2.c"
 # include "swap.c"
 # include "rotate.c"
 # include "reverse_rotate.c"

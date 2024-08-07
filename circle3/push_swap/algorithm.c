@@ -43,22 +43,49 @@ void	sort_3(t_stack **a)
 {
 	if ((*a)->num < (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
 		return ;
-	else if ((*a)->num < (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+	else if ((*a)->num < (*a)->next->num
+		&& (*a)->next->num > (*a)->next->next->num)
 		rra(a);
-	else if ((*a)->num > (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+	else if ((*a)->num > (*a)->next->num
+		&& (*a)->next->num < (*a)->next->next->num)
 		ra(a);
-	else if ((*a)->num > (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+	else if ((*a)->num > (*a)->next->num
+		&& (*a)->next->num > (*a)->next->next->num)
 	{
 		sa(a);
 		rra(a);
 	}
-	else if ((*a)->num < (*a)->next->num && (*a)->next->num > (*a)->next->next->num)
+	else if ((*a)->num < (*a)->next->num
+		&& (*a)->next->num > (*a)->next->next->num)
 	{
 		sa(a);
 		ra(a);
 	}
-	else if ((*a)->num > (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+	else if ((*a)->num > (*a)->next->num
+		&& (*a)->next->num < (*a)->next->next->num)
 		sa(a);
+}
+
+void	push_to_b_logic(t_stack **a,t_stack *curr_a, t_stack **b)
+{
+	if (curr_a->index == 0 && curr_a->target_node->index == 0)
+		pb(a, b);
+	else if (curr_a->above_median == 1 && curr_a->target_node->above_median
+		== 1 && curr_a->index != 0 && curr_a->target_node->index != 0)
+		rr(a, b);
+	else if (curr_a->above_median == 0 && curr_a->target_node->above_median
+		== 0 && curr_a->index != 0 && curr_a->target_node->index != 0)
+		rrr(a, b);
+	else if (curr_a->above_median == 1 && curr_a->index != 0)
+		ra(a);
+	else if (curr_a->above_median == 0 && curr_a->index != 0)
+		rra(a);
+	else if (curr_a->target_node->above_median
+		== 1 && curr_a->target_node->index != 0)
+		rb(b);
+	else if (curr_a->target_node->above_median
+		== 0 && curr_a->target_node->index != 0)
+		rrb(b);
 }
 
 void	push_to_b(t_stack **a, t_stack **b)
@@ -72,20 +99,7 @@ void	push_to_b(t_stack **a, t_stack **b)
 		current_a = *a;
 		while (current_a->cheapest != 1 && current_a != NULL)
 			current_a = current_a->next;
-		if (current_a->index == 0 && current_a->target_node->index == 0)
-			pb(a, b);
-		else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
-			rr(a, b);
-		else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
-			rrr(a, b);
-		else if (current_a->above_median == 1 && current_a->index != 0)
-			ra(a);
-		else if (current_a->above_median == 0 && current_a->index != 0)
-			rra(a);
-		else if (current_a->target_node->above_median == 1 && current_a->target_node->index != 0)
-			rb(b);
-		else if (current_a->target_node->above_median == 0 && current_a->target_node->index != 0)
-			rrb(b);
+		push_to_b_logic(a, current_a, b);
 		update_node_info(*a, *b);
 	}
 }
