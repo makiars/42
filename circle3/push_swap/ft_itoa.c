@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "push_swap.h"
+
 static void	ft_revarray(char *array, int i)
 {
 	char	temp;
