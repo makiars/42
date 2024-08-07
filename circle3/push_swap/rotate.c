@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marsenij <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
+/*   Updated: 2024/04/22 11:27:08 by marsenij         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	rotate(t_stack **a)
@@ -23,18 +35,18 @@ void	rotate(t_stack **a)
 void	ra(t_stack **a)
 {
 	rotate(a);
-	write(1,"ra\n",3);
+	write(1, "ra\n", 3);
 }
 
 void	rb(t_stack **b)
 {
 	rotate(b);
-	write(1,"rb\n",3);
+	write(1, "rb\n", 3);
 }
 
 void	rr(t_stack **a, t_stack **b)
 {
 	rotate(a);
 	rotate(b);
-	write(1,"rr\n",3);
+	write(1, "rr\n", 3);
 }

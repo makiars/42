@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marsenij <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
+/*   Updated: 2024/04/22 11:27:08 by marsenij         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	b_max_on_top(t_stack **a, t_stack **b)
@@ -35,7 +47,7 @@ void	push_to_a(t_stack **a, t_stack **b)
 	}
 	while (*a != min_num(*a))
 		rra(a);
-	while ((*b)!= NULL)
+	while ((*b) != NULL)
 		pa(a, b);
 }
 
@@ -66,7 +78,7 @@ void	sort_3(t_stack **a)
 		sa(a);
 }
 
-void	push_to_b_logic(t_stack **a,t_stack *curr_a, t_stack **b)
+void	push_to_b_logic(t_stack **a, t_stack *curr_a, t_stack **b)
 {
 	if (curr_a->index == 0 && curr_a->target_node->index == 0)
 		pb(a, b);

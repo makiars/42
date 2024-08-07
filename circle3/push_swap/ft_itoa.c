@@ -10,37 +10,50 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
-
-typedef struct s_stack
+static void	ft_revarray(char *array, int i)
 {
-	int				num;
-	int				index;
-	int				max_index;
-	int				push_cost;
-	int				above_median;
-	int				cheapest;
-	struct s_stack	*target_node;
-	struct s_stack	*next;
-	struct s_stack	*prev;
-}	t_stack;
+	char	temp;
+	int		j;
+	int		len;
 
-void	free_list(t_stack *head);
-void	update_node_info(t_stack *a, t_stack *b);
-int		ft_atoi(const char *nptr);
-char	*ft_itoa(int n);
+	len = i;
+	if (*array == '-')
+		j = 1;
+	else
+		j = 0;
+	while (j < len / 2 + 1)
+	{
+		temp = array[j];
+		array[j] = array[i];
+		array [i] = temp;
+		j++;
+		i--;
+	}
+}
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include "nodeinfo.c"
-# include "nodeinfo2.c"
-# include "swap.c"
-# include "rotate.c"
-# include "reverse_rotate.c"
-# include "push.c"
-# include "helper.c"
-# include "algorithm.c"
+char	*ft_itoa(int n)
+{
+	char	array[100];
+	int		i;
+	long	num;
 
-#endif
+	num = n;
+	i = 0;
+	if (num == 0)
+		return (ft_strdup("0"));
+	if (num < 0)
+	{
+		num = -num;
+		array[0] = '-';
+		i++;
+	}
+	while (num != 0)
+	{
+		array[i] = (num % 10) + '0';
+		num /= 10;
+		i++;
+	}
+	array[i] = '\0';
+	ft_revarray(array, i - 1);
+	return (ft_strdup(&array[0]));
+}
