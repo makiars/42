@@ -35,7 +35,7 @@ static void	ft_revarray(char *array, int i)
 
 char	*ft_itoa(int n)
 {
-	char	array[100];
+	char	array[20];
 	int		i;
 	long	num;
 
@@ -58,4 +58,37 @@ char	*ft_itoa(int n)
 	array[i] = '\0';
 	ft_revarray(array, i - 1);
 	return (ft_strdup(&array[0]));
+}
+
+char	*ft_strdup(const char *src)
+{
+	int		srclen;
+	char	*dest;
+	int		i;
+
+	srclen = ft_strlen(src);
+	dest = (char *)malloc(srclen + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (srclen > 0)
+	{
+		dest[i] = src[i];
+		i++;
+		srclen--;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+	char	*str;
+
+	str = (char *)s;
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
 }
