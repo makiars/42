@@ -102,32 +102,39 @@ void calc_cheapest(t_stack *a)
 	}
 	cheapest->cheapest = 1;
 }
-
+int shared_cost(t_stack *a)
+{
+	if (a->above_median && a->target_node->above_median)
+	{
+		if (a->index >= a->target_node->index)
+			return (a->index);
+		else
+			return (a->target_node->index);
+	}	
+	else if (a->above_median == 0 && a->target_node->above_median == 0)
+	{
+		if (a->max_index - a->index >= a->target_node->max_index - a->target_node->index)
+			return (a->max_index - a->index + 1);
+		else
+			return (a->target_node->max_index - a->target_node->index + 1);
+	}
+	else
+		return 0;
+}
 void calc_push_cost(t_stack *a)
 {
 	if (!a)
 		return ;
 	while (a)
 	{
-		if (a->above_median && a->target_node->above_median)
+		if (a->above_median && a->target_node->above_median || a->above_median == 0 && a->target_node->above_median == 0)
 		{
-			if (a->index > a->target_node->index)
-				a->push_cost = a->index;
-			else
-				a->push_cost = a->target_node->index;
+			a->push_cost = shared_cost(a);
 		}	
-		else if (a->above_median == 0 && a->target_node->above_median == 0)
-		{
-			if (a->index < a->target_node->index)
-				a->push_cost = a->max_index - a->index + 1;
-			else
-				a->push_cost = a->max_index - a->target_node->index + 1;
-		}
 		else if (a->above_median == 1 && a->target_node->above_median == 0)
 			a->push_cost = a->index + a->target_node->max_index - a->target_node->index + 1;
 		else if (a->above_median == 0 && a->target_node->above_median == 1)
 			a->push_cost = a->max_index - a->index + a->target_node->index + 1;
-			
 		a = a->next;
 	}
 }

@@ -107,13 +107,13 @@ void push_to_a(t_stack **a, t_stack **b)
 	t_stack *a_last;
 	t_stack *a_min;
 
-	while (max_num(*b)->num > min_num(*a)->num && (*b))
+
+	while ((*b) && max_num(*b)->num > min_num(*a)->num)
 	{
 		while (last_node(*a)->num > (*b)->num)
 			rra(a);
 		if ((*b)->num > last_node(*a)->num)
 			pa(a, b);
-		trouble(*a, *b);
 	}
 	while (*a != min_num(*a))
 		rra(a);
@@ -191,16 +191,8 @@ int main (int argc, char **argv)
 	a = insert_num(a,argc,argv);
 
 	push_to_b(&a, &b);
-	printf("After Push to B:");
-	trouble(a, b);
 	sort_3(&a);
 	update_node_info(a, b);
-	printf("After sort3:");
-	trouble(a, b);
 	b_max_on_top(&a, &b);
-	printf("After b_max_on_top:");
-	trouble(a, b);
 	push_to_a(&a, &b);
-	printf("After push_to_a:");
-	trouble(a, b);
 }
