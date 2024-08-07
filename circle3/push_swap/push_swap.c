@@ -66,44 +66,57 @@ void b_max_on_top(t_stack **a, t_stack **b)
 	}
 }
 
-t_stack *get_last_node(t_stack *a)
+t_stack *last_node(t_stack *a)
 {
 	while(a->next != NULL)
 		a = a->next;
 	return (a);
 }
 
-t_stack *get_max_num(t_stack *a)
+t_stack *max_num(t_stack *a)
 {
 	t_stack *a_max;
 
 	a_max = a;
-	while(a->next != NULL)
+	while(a != NULL)
 	{
 		if (a_max->num < a->num)
 			a_max = a;
 		a = a->next;
 	}
-	return (a);
+	return (a_max);
 }
 
-void push_to_a(t_stack **a, t_stack **b)//TODO: there is an error here where the stack a numbers dont get rotated
+t_stack *min_num(t_stack *a)
+{
+	t_stack *a_min;
+
+	a_min = a;
+	while(a != NULL)
+	{
+		if (a_min->num > a->num)
+			a_min = a;
+		a = a->next;
+	}
+	return (a_min);
+}
+
+
+void push_to_a(t_stack **a, t_stack **b)
 {
 	t_stack *a_last;
+	t_stack *a_min;
 
-	a_last = get_last_node(*a);
-	while ((*b)->num > a_last->num)
+	while (max_num(*b)->num > min_num(*a)->num && (*b))
 	{
-		if ((*b)->num < a_last->num)
-		{
+		while (last_node(*a)->num > (*b)->num)
 			rra(a);
-			a_last = get_last_node(*a);
-		}
-		pa(a, b);
-		//remove this,its for testing
-		printf("");
+		if ((*b)->num > last_node(*a)->num)
+			pa(a, b);
 		trouble(*a, *b);
 	}
+	while (*a != min_num(*a))
+		rra(a);
 	while((*b)!= NULL)
 		pa(a, b);
 }
@@ -136,7 +149,7 @@ void push_to_b(t_stack **a, t_stack **b)
 {
     t_stack *current_a;
 
-    if (*b == NULL)
+    if (*b == NULL || !b)
 		pb(a, b);
 	while ((*a)->max_index != 2)
     {
@@ -148,7 +161,7 @@ void push_to_b(t_stack **a, t_stack **b)
 		else if (current_a->above_median == 1 && current_a->target_node->above_median == 1 && current_a->index != 0 && current_a->target_node->index != 0)
 			rr(a, b);
 		else if (current_a->above_median == 0 && current_a->target_node->above_median == 0 && current_a->index != 0 && current_a->target_node->index != 0)
-		rrr(a, b);
+			rrr(a, b);
 		else if (current_a->above_median == 1 && current_a->index != 0)
         	ra(a);
 		else if (current_a->above_median == 0 && current_a->index != 0)
