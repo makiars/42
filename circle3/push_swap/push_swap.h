@@ -68,6 +68,7 @@ int		ft_strcmp(char *s1, char *s2);
 int		wordcnt(char **array);
 int		checkdup(t_stack *a, t_stack *a_start);
 int		is_sorted(t_stack *a);
+void	free_double_array(char **array);
 
 void	trouble(t_stack *a, t_stack *b);//needs to be removed
 

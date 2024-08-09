@@ -43,13 +43,13 @@ int	ft_atoi(const char *nptr)
 
 int	checkdup(t_stack *a, t_stack *a_start)
 {
-	while (a_start != a)
+	while (a_start != NULL && a_start != a)
 	{
-		if (a_start->num == a->num)
-			return (0);
+		if (a_start->num == a->num && a_start != a)
+			return (1);
 		a_start = a_start->next;
 	}
-	return (1);
+	return (0);
 }
 
 int	is_sorted(t_stack *a)
@@ -68,4 +68,19 @@ int	is_sorted(t_stack *a)
 		a = a->next;
 	}
 	return (1);
+}
+
+void	free_double_array(char **array)
+{
+	int	i;
+
+	if (array == NULL)
+		return ;
+	i = 0;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
