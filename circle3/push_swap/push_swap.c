@@ -43,6 +43,7 @@ t_stack	*insert_num(t_stack *a, int argc, char **argv)
 	int		check;
 	t_stack	*start;
 	int		i;
+	char	*temp;
 
 	start = a;
 	i = 1;
@@ -50,33 +51,16 @@ t_stack	*insert_num(t_stack *a, int argc, char **argv)
 	while (i < argc && a != NULL)
 	{
 		a->num = ft_atoi(argv[i]);
-		if (ft_strcmp(ft_itoa(a->num), argv[i]))
-			return (NULL);
+		temp = ft_itoa(a->num);
+		if (ft_strcmp(temp, argv[i]))
+			return (free(temp), NULL);
 		check = checkdup(a, start);
 		if (!check)
-			return (NULL);
+			return (free(temp), NULL);
 		i++;
 		a = a->next;
 	}
-	return (start);
-}
-
-int	is_sorted(t_stack *a)
-{
-	int	prev;
-
-	if (!a)
-		return (0);
-	prev = a->num;
-	a = a->next;
-	while (a)
-	{
-		if (a->num < prev)
-			return (0);
-		prev = a->num;
-		a = a->next;
-	}
-	return (1);
+	return (free(temp), start);
 }
 
 void	sortlogic(t_stack *a, t_stack*b, int argc)
@@ -87,10 +71,13 @@ void	sortlogic(t_stack *a, t_stack*b, int argc)
 		sort_3(&a);
 	else
 	{
+		update_node_info(a, b);
 		push_to_b(&a, &b);
+		update_node_info(a, b);
 		sort_3(&a);
 		update_node_info(a, b);
 		b_max_on_top(&a, &b);
+		update_node_info(a, b);
 		push_to_a(&a, &b);
 	}
 	free_list(a);
@@ -103,6 +90,7 @@ int	main(int argc, char **argv)
 	t_stack	*b;
 	int		i;
 	char	**split_a;
+	int		issplit;
 
 	i = 0;
 	a = NULL;
@@ -114,13 +102,19 @@ int	main(int argc, char **argv)
 	{
 		argc = wordcnt(split_a);
 		argv = split_a;
+		issplit = 1;
 	}
 	else if (argc < 4)
 		return (0);
 	while (++i < argc)
+	{
 		a = add_node(a);
+		if (!a)
+			return (0);
+	}
 	a = insert_num(a, argc, argv);
 	if (is_sorted(a))
 		return (0);
 	sortlogic(a, b, argc);
+	free(split_a);
 }

@@ -76,7 +76,7 @@ void	sort_3(t_stack **a)
 		sa(a);
 		ra(a);
 	}
-	else if (first > second && second < third)
+	else if (first > second && second)
 		sa(a);
 }
 

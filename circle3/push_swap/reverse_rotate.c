@@ -28,7 +28,6 @@ void	reverse_rotate(t_stack **a)
 	first->prev = last;
 	last->prev = NULL;
 	*a = last;
-	update_node_info(*a, NULL);
 }
 
 void	rra(t_stack **a)

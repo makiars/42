@@ -89,6 +89,8 @@ void show_full_node(t_stack *a)
 
 void trouble(t_stack *a, t_stack *b)
 {	
+	if (!(a->target_node))
+		return;
 	update_node_info(a, b);
 	show_full_node(a);
 	show_full_node(b);

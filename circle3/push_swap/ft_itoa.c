@@ -66,16 +66,11 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_itoa(int n)
+void	calc_itoa(int num, char *array)
 {
-	char	array[20];
 	int		i;
-	long	num;
 
-	num = n;
 	i = 0;
-	if (num == 0)
-		return (ft_strdup("0"));
 	if (num < 0)
 	{
 		num = -num;
@@ -90,5 +85,25 @@ char	*ft_itoa(int n)
 	}
 	array[i] = '\0';
 	ft_revarray(array, i - 1);
-	return (ft_strdup(&array[0]));
+}
+
+char	*ft_itoa(int n)
+{
+	char	array[20];
+	long	num;
+	char	*dup;
+
+	num = n;
+	if (num == 0)
+	{
+		dup = ft_strdup("0");
+		if (!dup)
+			return (NULL);
+		return (dup);
+	}
+	calc_itoa(num, array);
+	dup = ft_strdup(&array[0]);
+	if (!dup)
+		return (NULL);
+	return (dup);
 }

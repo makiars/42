@@ -51,3 +51,21 @@ int	checkdup(t_stack *a, t_stack *a_start)
 	}
 	return (1);
 }
+
+int	is_sorted(t_stack *a)
+{
+	int	prev;
+
+	if (!a)
+		return (0);
+	prev = a->num;
+	a = a->next;
+	while (a)
+	{
+		if (a->num < prev)
+			return (0);
+		prev = a->num;
+		a = a->next;
+	}
+	return (1);
+}
