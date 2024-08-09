@@ -3,6 +3,7 @@
         "random": "c",
         "stdlib.h": "c",
         "push_swap.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "type_traits": "c"
     }
 }

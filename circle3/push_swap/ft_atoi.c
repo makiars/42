@@ -40,3 +40,14 @@ int	ft_atoi(const char *nptr)
 	n /= 10;
 	return ((int)(n * minus));
 }
+
+int	checkdup(t_stack *a, t_stack *a_start)
+{
+	while (a_start != a)
+	{
+		if (a_start->num == a->num)
+			return (0);
+		a_start = a_start->next;
+	}
+	return (1);
+}

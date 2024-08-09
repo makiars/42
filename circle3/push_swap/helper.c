@@ -58,3 +58,13 @@ void	free_list(t_stack *head)
 		free(temp);
 	}
 }
+
+int	wordcnt(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+		i++;
+	return (i);
+}

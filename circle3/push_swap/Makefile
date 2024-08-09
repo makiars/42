@@ -1,6 +1,6 @@
 NAME = push_swap
 
-SRCS =  ft_strcmp.c ft_strlcpy.c ft_strtrim.c algorithm.c ft_itoa.c helper.c nodeinfo.c push_swap.c rotate.c ft_atoi.c ft_split.c nodeinfo2.c push.c reverse_rotate.c swap.c
+SRCS =  testing.c ft_strcmp.c ft_strlcpy.c ft_strtrim.c algorithm.c ft_itoa.c helper.c nodeinfo.c push_swap.c rotate.c ft_atoi.c ft_split.c nodeinfo2.c push.c reverse_rotate.c swap.c
 
 BOBJS = $(BSRCS:.c=.o)
 
@@ -8,7 +8,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 RM = rm -f
 

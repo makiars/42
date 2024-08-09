@@ -53,28 +53,30 @@ void	push_to_a(t_stack **a, t_stack **b)
 
 void	sort_3(t_stack **a)
 {
-	if ((*a)->num < (*a)->next->num && (*a)->next->num < (*a)->next->next->num)
+	int	first;
+	int	second;
+	int	third;
+
+	first = (*a)->num;
+	second = (*a)->next->num;
+	third = (*a)->next->next->num;
+	if (first < second && second < third)
 		return ;
-	else if ((*a)->num < (*a)->next->num
-		&& (*a)->next->num > (*a)->next->next->num)
+	else if (first < second && second > third && third < first)
 		rra(a);
-	else if ((*a)->num > (*a)->next->num
-		&& (*a)->next->num < (*a)->next->next->num)
+	else if (first > second && second < third && first > third)
 		ra(a);
-	else if ((*a)->num > (*a)->next->num
-		&& (*a)->next->num > (*a)->next->next->num)
+	else if (first > second && second > third)
 	{
 		sa(a);
 		rra(a);
 	}
-	else if ((*a)->num < (*a)->next->num
-		&& (*a)->next->num > (*a)->next->next->num)
+	else if (first < second && second > third)
 	{
 		sa(a);
 		ra(a);
 	}
-	else if ((*a)->num > (*a)->next->num
-		&& (*a)->next->num < (*a)->next->next->num)
+	else if (first > second && second < third)
 		sa(a);
 }
 

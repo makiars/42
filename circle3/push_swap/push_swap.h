@@ -65,5 +65,9 @@ size_t	ft_strlen(const char *s);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strdup(const char *src);
 int		ft_strcmp(char *s1, char *s2);
+int		wordcnt(char **array);
+int		checkdup(t_stack *a, t_stack *a_start);
+
+void	trouble(t_stack *a, t_stack *b);//needs to be removed
 
 #endif

@@ -38,17 +38,6 @@ t_stack	*add_node(t_stack *lst)
 	return (start);
 }
 
-int	checkdup(t_stack *a, t_stack *a_start)
-{
-	while (a_start != a)
-	{
-		if (a_start->num == a->num)
-			return (0);
-		a_start = a_start->next;
-	}
-	return (1);
-}
-
 t_stack	*insert_num(t_stack *a, int argc, char **argv)
 {
 	int		check;
@@ -90,22 +79,8 @@ int	is_sorted(t_stack *a)
 	return (1);
 }
 
-int	main(int argc, char **argv)
+void	sortlogic(t_stack *a, t_stack*b, int argc)
 {
-	t_stack	*a;
-	t_stack	*b;
-	int		i;
-
-	if (argc < 4)
-		return (0);
-	i = 0;
-	a = NULL;
-	b = NULL;
-	while (++i < argc)
-		a = add_node(a);
-	a = insert_num(a, argc, argv);
-	if (is_sorted(a))
-		return (0);
 	if (!a)
 		write(2, "Error\n", 6);
 	else if (argc == 4)
@@ -120,4 +95,32 @@ int	main(int argc, char **argv)
 	}
 	free_list(a);
 	free_list(b);
+}
+
+int	main(int argc, char **argv)
+{
+	t_stack	*a;
+	t_stack	*b;
+	int		i;
+	char	**split_a;
+
+	i = 0;
+	a = NULL;
+	b = NULL;
+	split_a = ft_split(argv[1], ' ');
+	if (!split_a)
+		return (0);
+	if (wordcnt(split_a) > 1)
+	{
+		argc = wordcnt(split_a);
+		argv = split_a;
+	}
+	else if (argc < 4)
+		return (0);
+	while (++i < argc)
+		a = add_node(a);
+	a = insert_num(a, argc, argv);
+	if (is_sorted(a))
+		return (0);
+	sortlogic(a, b, argc);
 }
