@@ -38,20 +38,56 @@ t_stack	*add_node(t_stack *lst)
 	return (start);
 }
 
+int	checkdup(t_stack *a, t_stack *a_start)
+{
+	while (a_start != a)
+	{
+		if (a_start->num == a->num)
+			return (0);
+		a_start = a_start->next;
+	}
+	return (1);
+}
+
 t_stack	*insert_num(t_stack *a, int argc, char **argv)
 {
+	int		check;
 	t_stack	*start;
 	int		i;
 
 	start = a;
 	i = 1;
+	check = -1;
 	while (i < argc && a != NULL)
 	{
-		a->num = atoi(argv[i]);//TODO: exchange atoi for ft_atoi
+		a->num = ft_atoi(argv[i]);
+		if (ft_strcmp(ft_itoa(a->num), argv[i]))
+			return (NULL);
+		check = checkdup(a, start);
+		if (!check)
+			return (NULL);
 		i++;
 		a = a->next;
 	}
 	return (start);
+}
+
+int	is_sorted(t_stack *a)
+{
+	int	prev;
+
+	if (!a)
+		return (0);
+	prev = a->num;
+	a = a->next;
+	while (a)
+	{
+		if (a->num < prev)
+			return (0);
+		prev = a->num;
+		a = a->next;
+	}
+	return (1);
 }
 
 int	main(int argc, char **argv)
@@ -60,7 +96,7 @@ int	main(int argc, char **argv)
 	t_stack	*b;
 	int		i;
 
-	if (argc == 1)
+	if (argc < 4)
 		return (0);
 	i = 0;
 	a = NULL;
@@ -68,9 +104,11 @@ int	main(int argc, char **argv)
 	while (++i < argc)
 		a = add_node(a);
 	a = insert_num(a, argc, argv);
-	if (argc < 4) //more input error handling needed, use ito and atoi
+	if (is_sorted(a))
+		return (0);
+	if (!a)
 		write(2, "Error\n", 6);
-	else if (argc == 3)
+	else if (argc == 4)
 		sort_3(&a);
 	else
 	{

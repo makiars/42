@@ -33,33 +33,6 @@ static void	ft_revarray(char *array, int i)
 	}
 }
 
-char	*ft_itoa(int n)
-{
-	char	array[20];
-	int		i;
-	long	num;
-
-	num = n;
-	i = 0;
-	if (num == 0)
-		return (ft_strdup("0"));
-	if (num < 0)
-	{
-		num = -num;
-		array[0] = '-';
-		i++;
-	}
-	while (num != 0)
-	{
-		array[i] = (num % 10) + '0';
-		num /= 10;
-		i++;
-	}
-	array[i] = '\0';
-	ft_revarray(array, i - 1);
-	return (ft_strdup(&array[0]));
-}
-
 char	*ft_strdup(const char *src)
 {
 	int		srclen;
@@ -91,4 +64,31 @@ size_t	ft_strlen(const char *s)
 	while (str[len])
 		len++;
 	return (len);
+}
+
+char	*ft_itoa(int n)
+{
+	char	array[20];
+	int		i;
+	long	num;
+
+	num = n;
+	i = 0;
+	if (num == 0)
+		return (ft_strdup("0"));
+	if (num < 0)
+	{
+		num = -num;
+		array[0] = '-';
+		i++;
+	}
+	while (num != 0)
+	{
+		array[i] = (num % 10) + '0';
+		num /= 10;
+		i++;
+	}
+	array[i] = '\0';
+	ft_revarray(array, i - 1);
+	return (ft_strdup(&array[0]));
 }
