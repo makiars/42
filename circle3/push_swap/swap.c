@@ -34,7 +34,6 @@ void	sa(t_stack **a)
 {
 	swap(a);
 	write(1, "sa\n", 3);
-	
 }
 
 void	sb(t_stack **b)

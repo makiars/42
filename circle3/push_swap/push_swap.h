@@ -15,7 +15,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h>
 
 typedef struct s_stack
 {
@@ -69,10 +68,6 @@ int		wordcnt(char **array);
 int		checkdup(t_stack *a, t_stack *a_start);
 int		is_sorted(t_stack *a);
 void	free_double_array(char **array);
-//void	free_all(char **split_a, t_stack *a, t_stack *b, int issplit);
 t_stack	*create_all_nodes(t_stack *a, int argc, int issplit);
 t_stack	*add_node(t_stack *lst);
-
-void	trouble(t_stack *a, t_stack *b);//needs to be removed
-void 	show_full_node(t_stack *a);
 #endif

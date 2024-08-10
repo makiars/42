@@ -69,7 +69,7 @@ t_stack	*sortlogic(t_stack *a, t_stack*b, int argc, int issplit)
 {
 	if (!a)
 		write(2, "Error\n", 6);
-	else if (argc == 4 || (issplit && argc == 3))
+	else if ((argc == 4 && issplit != 1) || (issplit && argc == 3))
 		sort_3(&a);
 	else
 	{
@@ -86,7 +86,6 @@ t_stack	*sortlogic(t_stack *a, t_stack*b, int argc, int issplit)
 
 int	init_split(char ***argv, int *argc, char ***split_a)
 {
-
 	*split_a = NULL;
 	*split_a = ft_split((*argv)[1], ' ');
 	if (!(*split_a))

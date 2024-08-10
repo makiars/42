@@ -41,7 +41,6 @@ t_stack	*create_all_nodes(t_stack *a, int argc, int issplit)
 {
 	int	i;
 
-
 	i = 0;
 	if (issplit)
 		i = -1;
