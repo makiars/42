@@ -53,7 +53,7 @@ t_stack	*insert_num(t_stack *a, int argc, char **argv)
 		if (!temp)
 			return (free_list(start), NULL);
 		if (ft_strcmp(temp, argv[i]))
-			return (free(temp), free_list(start), NULL);
+			return (free(temp), free_list(start), write(2, "Error\n", 6), NULL);
 		if (checkdup(a, start))
 			return (free(temp), free_list(start), write(2, "Error\n", 6), NULL);
 		i++;
@@ -99,21 +99,6 @@ int	init_split(char ***argv, int *argc, char ***split_a)
 		return (free_double_array(*split_a), 0);
 }
 
-t_stack	*create_all_nodes(t_stack *a, int argc)
-{
-	int	i;
-
-
-	i = 0;
-	while (++i < argc)
-	{
-		a = add_node(a);
-		if (!a)
-			return (free_list(a), NULL);
-	}
-	return (a);
-}
-
 int	main(int argc, char **argv)
 {
 	t_stack	*a;
@@ -125,16 +110,19 @@ int	main(int argc, char **argv)
 	i = 0;
 	a = NULL;
 	b = NULL;
-	issplit = -1;
+	issplit = 0;
 	if (argc == 2)
 		issplit = init_split(&argv, &argc, &split_a);
 	a = create_all_nodes(a, argc);
 	a = insert_num(a, argc, argv);
+	if (issplit)
+		free_double_array(split_a);
 	if (!a)
 		return (free_list(a), free_list(b), 0);
 	if (is_sorted(a))
 		return (free_list(a), free_list(b), 0);
 	a = sortlogic(a, b, argc);
 	trouble(a, b);
-	free_all(split_a, a, b);
+	free_list(a);
+	free_list(b);
 }

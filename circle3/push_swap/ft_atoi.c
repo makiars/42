@@ -85,7 +85,7 @@ void	free_double_array(char **array)
 	free(array);
 }
 
-void	free_all(char **split_a, t_stack *a, t_stack *b)
+void	free_all(char **split_a, t_stack *a, t_stack *b, int issplit)
 {
 	if (a)
 	{
@@ -97,6 +97,6 @@ void	free_all(char **split_a, t_stack *a, t_stack *b)
 		free_list(b);
 		b = NULL;
 	}
-	if (split_a)
+	if (issplit && split_a)
 		free_double_array(split_a);
 }

@@ -69,7 +69,9 @@ int		wordcnt(char **array);
 int		checkdup(t_stack *a, t_stack *a_start);
 int		is_sorted(t_stack *a);
 void	free_double_array(char **array);
-void	free_all(char **split_a, t_stack *a, t_stack *b);
+//void	free_all(char **split_a, t_stack *a, t_stack *b, int issplit);
+t_stack	*create_all_nodes(t_stack *a, int argc);
+t_stack	*add_node(t_stack *lst);
 
 void	trouble(t_stack *a, t_stack *b);//needs to be removed
 

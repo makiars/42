@@ -94,6 +94,8 @@ char	*ft_itoa(int n)
 	char	*dup;
 
 	num = n;
+	if (num == -2147483648)
+		return (ft_strdup("-2147483648"));
 	if (num == 0)
 	{
 		dup = ft_strdup("0");

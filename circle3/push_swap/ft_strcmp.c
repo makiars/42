@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "push_swap.h"
+
 int	ft_strcmp(char *s1, char *s2)
 {
 	int		a;
@@ -31,6 +33,21 @@ int	ft_strcmp(char *s1, char *s2)
 		}
 		s1++;
 		s2++;
+	}
+	return (a);
+}
+
+t_stack	*create_all_nodes(t_stack *a, int argc)
+{
+	int	i;
+
+
+	i = 0;
+	while (++i < argc)
+	{
+		a = add_node(a);
+		if (!a)
+			return (free_list(a), NULL);
 	}
 	return (a);
 }
