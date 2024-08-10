@@ -37,12 +37,14 @@ int	ft_strcmp(char *s1, char *s2)
 	return (a);
 }
 
-t_stack	*create_all_nodes(t_stack *a, int argc)
+t_stack	*create_all_nodes(t_stack *a, int argc, int issplit)
 {
 	int	i;
 
 
 	i = 0;
+	if (issplit)
+		i = -1;
 	while (++i < argc)
 	{
 		a = add_node(a);

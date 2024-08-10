@@ -66,7 +66,21 @@ void show_full_node(t_stack *a)
     }
 	    if (!(current->target_node))
     {
-        printf("Target empty.\n");
+	printf("---------------------------------------------------------------------\n");
+	printf("| %-5s | %-5s | %-9s | %-8s | %-6s | %-8s | %-10s | %-10s |\n", 
+       "Num", "Idx", "Max_Idx", "Cost", "Median", "Cheapest", "Next", "Prev");
+	printf("---------------------------------------------------------------------\n");
+
+	while (current)
+	{
+    	printf("| %-5d | %-5d | %-9d | %-8d | %-6d | %-8d | %-10p | %-10p |\n", 
+        	   current->num, current->index, current->max_index, current->push_cost, 
+        	   current->above_median, current->cheapest, 
+        	   current->next, current->prev);
+    	current = current->next;
+	}
+printf("---------------------------------------------------------------------\n");
+
         return;
     }
 
