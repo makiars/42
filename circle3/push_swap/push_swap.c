@@ -82,18 +82,22 @@ t_stack	*sortlogic(t_stack *a, t_stack*b, int argc)
 	return (a);
 }
 
-int	init_split(char **split_a, char **argv)
+int	init_split(char ***argv, int *argc, char ***split_a)
 {
 
-	split_a = ft_split(argv[1], ' ');
-	if (!split_a)
+	*split_a = NULL;
+	*split_a = ft_split((*argv)[1], ' ');
+	if (!(*split_a))
 		return (0);
-	if (wordcnt(split_a) > 1)
+	if (wordcnt(*split_a) > 1)
+	{
+		*argc = wordcnt(*split_a);
+		*argv = *split_a;
 		return (1);
+	}
 	else
-		return (free_double_array(split_a), 0);
+		return (free_double_array(*split_a), 0);
 }
-
 int	main(int argc, char **argv)
 {
 	t_stack	*a;
@@ -105,17 +109,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	a = NULL;
 	b = NULL;
-	split_a = ft_split(argv[1], ' ');
-	if (!split_a)
-		return (0);
-	if (wordcnt(split_a) > 1) // put this into seperate function and add argc +1 and argv[0]
-	{
-		argc = wordcnt(split_a);
-		argv = split_a;
-		issplit = 1;
-	}
-	else if (argc < 4)
-		return (free_double_array(split_a), 0);
+	issplit = -1;
+	if (argc == 2)
+		issplit = init_split(&argv, &argc, &split_a);
 	while (++i < argc)
 	{
 		a = add_node(a);
@@ -123,12 +119,12 @@ int	main(int argc, char **argv)
 			return (free_double_array(split_a), free_list(a), free_list(b), 0);
 	}
 	a = insert_num(a, argc, argv);
-	free_double_array(split_a);
+
 	if (!a)
 		return (free_list(a), free_list(b), 0);
 	if (is_sorted(a))
 		return (free_list(a), free_list(b), 0);
 	a = sortlogic(a, b, argc);
-	free_list(a);
-	free_list(b);
+	trouble(a, b);
+	free_all(split_a, a, b);
 }

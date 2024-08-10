@@ -74,13 +74,29 @@ void	free_double_array(char **array)
 {
 	int	i;
 
-	if (array == NULL)
-		return ;
 	i = 0;
+	if (array == NULL || array[i] == NULL)
+		return ;
 	while (array[i] != NULL)
 	{
 		free(array[i]);
 		i++;
 	}
 	free(array);
+}
+
+void	free_all(char **split_a, t_stack *a, t_stack *b)
+{
+	if (a)
+	{
+		free_list(a);
+		a = NULL;
+	}
+	if (b)
+	{
+		free_list(b);
+		b = NULL;
+	}
+	if (split_a)
+		free_double_array(split_a);
 }
