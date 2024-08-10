@@ -98,6 +98,22 @@ int	init_split(char ***argv, int *argc, char ***split_a)
 	else
 		return (free_double_array(*split_a), 0);
 }
+
+t_stack	*create_all_nodes(t_stack *a, int argc)
+{
+	int	i;
+
+
+	i = 0;
+	while (++i < argc)
+	{
+		a = add_node(a);
+		if (!a)
+			return (free_list(a), NULL);
+	}
+	return (a);
+}
+
 int	main(int argc, char **argv)
 {
 	t_stack	*a;
@@ -112,14 +128,8 @@ int	main(int argc, char **argv)
 	issplit = -1;
 	if (argc == 2)
 		issplit = init_split(&argv, &argc, &split_a);
-	while (++i < argc)
-	{
-		a = add_node(a);
-		if (!a)
-			return (free_double_array(split_a), free_list(a), free_list(b), 0);
-	}
+	a = create_all_nodes(a, argc);
 	a = insert_num(a, argc, argv);
-
 	if (!a)
 		return (free_list(a), free_list(b), 0);
 	if (is_sorted(a))
