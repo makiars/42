@@ -82,6 +82,18 @@ t_stack	*sortlogic(t_stack *a, t_stack*b, int argc)
 	return (a);
 }
 
+int	init_split(char **split_a, char **argv)
+{
+
+	split_a = ft_split(argv[1], ' ');
+	if (!split_a)
+		return (0);
+	if (wordcnt(split_a) > 1)
+		return (1);
+	else
+		return (free_double_array(split_a), 0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_stack	*a;
