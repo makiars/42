@@ -75,7 +75,7 @@ void	free_double_array(char **array)
 	int	i;
 
 	i = 0;
-	if (array == NULL || array[i] == NULL)
+	if (array == NULL)
 		return ;
 	while (array[i] != NULL)
 	{

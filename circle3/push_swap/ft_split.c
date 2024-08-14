@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 		return (free(str), NULL);
 	while (++i < wordcnt)
 	{
-		array [i] = (char *) malloc(ft_wordlen(&str[index], c));
+		array [i] = (char *) malloc(ft_wordlen(&str[index], c) + 1);
 		if (array [i] == NULL)
 			return (ft_freeme(array, str, i), NULL);
 		ft_strlcpy(&array[i][0], &str[index], (ft_wordlen(&str[index], c) + 1));

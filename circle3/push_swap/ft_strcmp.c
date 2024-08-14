@@ -52,3 +52,9 @@ t_stack	*create_all_nodes(t_stack *a, int argc, int issplit)
 	}
 	return (a);
 }
+
+void	free_lists(t_stack *a, t_stack *b)
+{
+	free_list(a);
+	free_list(b);
+}
