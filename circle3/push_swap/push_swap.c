@@ -69,6 +69,8 @@ t_stack	*sortlogic(t_stack *a, t_stack*b, int argc, int issplit)
 {
 	if (!a)
 		write(2, "Error\n", 6);
+	else if ((argc == 3 && issplit != 1) || (issplit && argc == 2))
+		sort_2(&a);
 	else if ((argc == 4 && issplit != 1) || (issplit && argc == 3))
 		sort_3(&a);
 	else if (argc > 3)
@@ -112,8 +114,6 @@ int	main(int argc, char **argv)
 	a = NULL;
 	b = NULL;
 	issplit = 0;
-	if (argc == 3)
-		return (1);
 	if (argc == 2)
 		issplit = init_split(&argv, &argc, &split_a);
 	a = create_all_nodes(a, argc, issplit);

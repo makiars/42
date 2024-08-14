@@ -58,3 +58,9 @@ void	free_lists(t_stack *a, t_stack *b)
 	free_list(a);
 	free_list(b);
 }
+
+void	sort_2(t_stack **a)
+{
+	if ((*a)->num > (*a)->next->num)
+		sa(a);
+}

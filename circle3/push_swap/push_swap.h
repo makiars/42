@@ -71,5 +71,6 @@ void	free_double_array(char **array);
 t_stack	*create_all_nodes(t_stack *a, int argc, int issplit);
 t_stack	*add_node(t_stack *lst);
 void	free_lists(t_stack *a, t_stack *b);
+void	sort_2(t_stack **a);
 
 #endif
