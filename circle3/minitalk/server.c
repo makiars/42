@@ -40,12 +40,14 @@ void	sighandler(int sig)
 int	main(void)
 {
 	int	pid;
+	struct sigaction sa;
 
 	pid = getpid();
-
-	signal(SIGUSR1, sighandler);
-	signal(SIGUSR2, sighandler);
-
+	sa.sa_handler = sighandler;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	write(1, ft_itoa(pid), ft_strlen(ft_itoa(pid)));
 	while (1)
 	{
