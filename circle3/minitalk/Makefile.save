@@ -1,0 +1,31 @@
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -L. -l:libft.a
+
+
+
+
+client: client.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+server: server.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+client.o: client.c
+	$(CC) $(CFLAGS) -c $<
+
+server.o: server.c
+	$(CC) $(CFLAGS) -c $<
+
+all: client server
+
+clean:
+	rm -f client.o server.o
+
+fclean: clean
+	rm -f client server
+
+re: fclean all
+
+.PHONY: all clean fclean re
+
