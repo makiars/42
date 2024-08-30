@@ -19,6 +19,19 @@ void sig_ack_handler (int signal)
 	(void) signal;
 	g_ack_received = 1;
 }
+
+void	send_bits(char c, int pid)
+{
+	int	err;
+
+	if (c & 0b10000000)
+		err = kill(pid, SIGUSR2);
+	else
+		err = kill(pid, SIGUSR1);
+	if (err)
+		exit(1);
+}
+
 void	send(int pid, char *str)
 {
 	int		i;
@@ -36,10 +49,7 @@ void	send(int pid, char *str)
 		c = *str;
 		while (i < 8)
 		{
-			if (c & 0b10000000)
-				kill(pid, SIGUSR2);
-			else
-				kill(pid, SIGUSR1);
+			send_bits(c, pid);
 			c = c << 1;
 			i++;
 			while (!g_ack_received)
@@ -55,7 +65,8 @@ int	main(int argc, char **argv)
 {
 	int	i;
 	int	pid;
-	
+	int	err;
+
 	pid = ft_atoi(argv[1]);
 	if (pid < 1)
 		return (2);
@@ -68,7 +79,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < 8)
 	{
-		kill(pid, SIGUSR1);
+		err = kill(pid, SIGUSR1);
+		if (err)
+			exit (2);
 		while (!g_ack_received)
 			pause();
 		g_ack_received = 0;

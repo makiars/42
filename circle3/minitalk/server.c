@@ -61,27 +61,40 @@ void writeall(void)
 	g_char_list = NULL;
 }
 
+void make_byte(int *i, char *c)
+{
+	if (*i == 8)
+	{
+		if (*c == 0)
+			writeall();
+		append_node(&g_char_list, *c);
+		*i = 0;
+		*c = 0;
+	}
+}
+
 void	sighandler(int signal, siginfo_t *info, void *context)
 {
 	static int	i;
 	static char	c;
+	int			err;
 
+	err = 0;
 	(void) context;
 	if (signal == SIGUSR1)
 		c = c << 1;
 	else if (signal == SIGUSR2)
 		c = c << 1 | 0b00000001;
 	i++;
-	if (i == 8)
-	{
-		if(c == 0)
-			writeall();
-		append_node(&g_char_list, c);
-		i = 0;
-		c = 0;
-	}
+	make_byte(&i, &c);
 	if (info->si_pid != 0)
-		kill(info->si_pid, SIGUSR1);
+		err = kill(info->si_pid, SIGUSR1);
+	if (err)
+	{
+		writeall();
+		write(1, "\nPart of message was lost\n", 26);
+		exit(2);
+	}
 }
 
 int main(void)
