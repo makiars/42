@@ -61,11 +61,12 @@ void writeall(void)
 	g_char_list = NULL;
 }
 
-void	sighandler(int signal)
+void	sighandler(int signal, siginfo_t *info, void *context)
 {
 	static int	i;
 	static char	c;
 
+	(void) context;
 	if (signal == SIGUSR1)
 		c = c << 1;
 	else if (signal == SIGUSR2)
@@ -79,6 +80,8 @@ void	sighandler(int signal)
 		i = 0;
 		c = 0;
 	}
+	if (info->si_pid != 0)
+		kill(info->si_pid, SIGUSR1);
 }
 
 int main(void)
@@ -88,17 +91,17 @@ int main(void)
 	char			*pid_str;
 
 	pid = getpid();
-	sa.sa_handler = sighandler;
-	sa.sa_flags = 0;
+	sa.sa_sigaction = sighandler;
+	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	pid_str = ft_itoa(pid);
 	write(1, pid_str, ft_strlen(pid_str));
+	free(pid_str);
 	while (1)
 	{
 		pause();
 	}
-	free(pid_str);
 	return 0;
 }

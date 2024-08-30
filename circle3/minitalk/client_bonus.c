@@ -12,10 +12,23 @@
 
 #include "minitalk.h"
 
+volatile int g_ack_received;
+
+void sig_ack_handler (int signal)
+{
+	(void) signal;
+	g_ack_received = 1;
+}
 void	send(int pid, char *str)
 {
 	int		i;
-	char	c;
+	char		c;
+	struct sigaction sa;
+
+	sa.sa_handler = sig_ack_handler;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
 
 	i = 0;
 	while (*str != '\0')
@@ -30,6 +43,9 @@ void	send(int pid, char *str)
 			c = c << 1;
 			usleep(100);
 			i++;
+			while (!g_ack_received)
+				pause();
+			g_ack_received = 0;
 		}
 		i = 0;
 		str++;
@@ -42,6 +58,8 @@ int	main(int argc, char **argv)
 	int	pid;
 	
 	pid = ft_atoi(argv[1]);
+	if (pid < 1)
+		return (2);
 	if (argc != 3)
 	{
 		write (2, "Format: ./client PID String\n", 28);
