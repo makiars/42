@@ -38,10 +38,21 @@ void	send(int pid, char *str)
 
 int	main(int argc, char **argv)
 {
+	int	i;
+	int	pid;
+	
+	pid = ft_atoi(argv[1]);
 	if (argc != 3)
 	{
 		write (2, "Format: ./client PID String\n", 28);
 		return (1);
 	}
-	send(ft_atoi(argv[1]), argv[2]);
+	send(pid, argv[2]);
+	i = 0;
+	while (i < 8)
+	{
+		kill(pid, SIGUSR1);
+		i++;
+		usleep(100);
+	}
 }
