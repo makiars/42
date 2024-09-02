@@ -97,10 +97,18 @@ void	sighandler(int signal, siginfo_t *info, void *context)
 	}
 }
 
+void sigint_handler(int signal)
+{
+    (void)signal; // Unused parameter
+    writeall();  // Clean up allocated memory
+    exit(0);     // Exit gracefully
+}
+
 int main(void)
 {
 	int			pid;
 	struct sigaction	sa;
+	struct sigaction	sa_int;
 	char			*pid_str;
 
 	pid = getpid();
@@ -109,6 +117,10 @@ int main(void)
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
+	sa_int.sa_handler = sigint_handler;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	sigaction(SIGINT, &sa_int, NULL);
 	pid_str = ft_itoa(pid);
 	write(1, pid_str, ft_strlen(pid_str));
 	free(pid_str);
