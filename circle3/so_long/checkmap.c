@@ -21,7 +21,7 @@ void	checksquare(int fd, int *rows, int *cols)
 		exit(EXIT_FAILURE);
 	}
 	*cols = ft_strlen(line);
-	while(line)
+	while (line)
 	{
 		temp = line;
 		++(*rows);
@@ -75,7 +75,7 @@ int	checkwalls(char **map, int cols, int rows)
 	while (map[i] != NULL)
 	{
 		if (map[i][0] != '1' || map[i][cols - 1] != '1')
-			return(0);
+			return (0);
 		i++;
 	}
 	return (1);
@@ -109,7 +109,8 @@ void	inputcheck(char **map, int cols, int rows)
 char	**parseinput(int fd, int rows, int cols)
 {
 	char	**map;
-	int	i;
+	int		i;
+
 	i = -1;
 	map = (char **)malloc((rows + 1) * (sizeof(char *)));
 	if (map == NULL)
@@ -122,7 +123,6 @@ char	**parseinput(int fd, int rows, int cols)
 	map[i] = NULL;
 	inputcheck(map, cols, rows);
 	return (map);
-	
 }
 
 void	openfile(int *fd, char **argv)
