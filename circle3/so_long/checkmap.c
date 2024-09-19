@@ -1,12 +1,6 @@
 //header
-//
 
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include "get_next_line.h"
+# include "so_long.h"
 
 void	checksquare(int fd, int *rows, int *cols)
 {
@@ -93,7 +87,7 @@ void	inputcheck(char **map, int cols, int rows)
 	cntP = cntletter(map, 'P');
 	cntE = cntletter(map, 'E');
 	cntC = cntletter(map, 'C');
-	if (cntP != 1 || cntE != 1 || cntC < 1 )
+	if (cntP != 1 || cntE != 1 || cntC < 1)
 	{
 		write(1, "incorrect Player, Consumable or Exit number\n", 44);
 		exit(EXIT_FAILURE);
@@ -101,7 +95,7 @@ void	inputcheck(char **map, int cols, int rows)
 	//free doublearray
 	if(!(wallcheck))
 	{
-		write(1,"Walls wrong\n", 12);
+		write (1, "Walls wrong\n", 12);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -135,7 +129,7 @@ void	openfile(int *fd, char **argv)
 	}
 }
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int	fd;
 	int	rows;
