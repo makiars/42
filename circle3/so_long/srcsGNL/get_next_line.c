@@ -88,7 +88,7 @@ int	ft_linelen(char *s)
 }
 
 /*
-  #include <fcntl.h> // for open/close functions
+#include <fcntl.h> // for open/close functions
 #include <stdio.h> // for printf
 
 int main(void)

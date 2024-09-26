@@ -128,10 +128,10 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	get_map(argc, argv, &data);
 	data.mlx_ptr = mlx_init();
 	if (!data.mlx_ptr)
 		return (1);
-	get_map(argc, argv, &data);
 	data.win_ptr = mlx_new_window(data.mlx_ptr, data.cols * 36, data.rows * 36, "so long");
 	if (!data.win_ptr)
 		return (free(data.mlx_ptr), 1);

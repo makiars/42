@@ -29,9 +29,10 @@ void	checksquare(int fd, int *rows, int *cols)
 	{
 		temp = line;
 		++(*rows);
-		if (*cols != (int)ft_strlen(line))//not sure if this quickfix is ok
+		if (*cols != (int)ft_strlen(line))
 		{
 			write(2, "Map not square\n", 15);
+			free(line);
 			exit(EXIT_FAILURE);
 		}
 		line = get_next_line(fd);
@@ -124,6 +125,7 @@ char	**parseinput(int fd, int rows, int cols)
 	}
 	while (++i < rows)
 		map[i] = get_next_line(fd);
+	map[i] = get_next_line(fd);
 	map[i] = NULL;
 	inputcheck(map, cols, rows);
 	return (map);
