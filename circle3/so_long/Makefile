@@ -1,8 +1,7 @@
 NAME = so_long
 
-SRCS =  window.c
+SRCS =  testing.c window.c checkmap.c ./srcsGNL/get_next_line.c ./srcsGNL/get_next_line_utils.c
 
-BOBJS = $(BSRCS:.c=.o)
 
 OBJS = $(SRCS:.c=.o)
 

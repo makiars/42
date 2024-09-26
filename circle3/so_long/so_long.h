@@ -28,10 +28,27 @@ typedef struct s_data
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
-	void		*textures[5];
-//	t_map		*map;
+	char		**map;
+	int			rows;
+	int			cols;
+//	Assets
+	char		*back_path;
+	char		*wall_path;
+	char		*player_path;
+	char		*exit_path;
+	int			width;
+	int			height;
+	void		*img_exit;
+	void		*img_back;
+	void		*img_wall;
+	void		*img_consumable;
+	void		*img_player;
+// Player location
+	int			Px;
+	int			Py;
 }	t_data;
 
-
+void get_map(int argc, char **argv, t_data *data);
+void print_string_array(char **array);
 
 #endif

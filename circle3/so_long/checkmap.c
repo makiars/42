@@ -1,6 +1,16 @@
-//header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checkmap.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marsenij <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/26 08:39:20 by marsenij          #+#    #+#             */
+/*   Updated: 2024/09/26 08:48:22 by marsenij         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "so_long.h"
+#include "so_long.h"
 
 void	checksquare(int fd, int *rows, int *cols)
 {
@@ -19,7 +29,7 @@ void	checksquare(int fd, int *rows, int *cols)
 	{
 		temp = line;
 		++(*rows);
-		if (*cols != ft_strlen(line))
+		if (*cols != (int)ft_strlen(line))//not sure if this quickfix is ok
 		{
 			write(2, "Map not square\n", 15);
 			exit(EXIT_FAILURE);
@@ -129,13 +139,15 @@ void	openfile(int *fd, char **argv)
 	}
 }
 
-int main(int argc, char **argv)
+void	get_map(int argc, char **argv, t_data *data)
 {
-	int	fd;
-	int	rows;
-	int	cols;
+	int		fd;
+	int		rows;
+	int		cols;
 	char	**map;
 
+	if (argc != 2)
+		exit (EXIT_FAILURE);
 	cols = 0;
 	rows = 0;
 	openfile(&fd, argv);
@@ -144,4 +156,8 @@ int main(int argc, char **argv)
 	openfile(&fd, argv);
 	map = parseinput(fd, rows, cols);
 	close(fd);
+	data->map = map;
+	data->rows = rows;
+	data->cols = cols - 1;
+//	print_string_array(map);
 }

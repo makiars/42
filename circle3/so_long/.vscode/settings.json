@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"unistd.h": "c",
-		"xlib.h": "c"
+		"xlib.h": "c",
+		"so_long.h": "c"
 	}
 }
