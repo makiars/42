@@ -48,7 +48,8 @@ typedef struct s_data
 	int			Py;
 }	t_data;
 
+void free_map(char **map);
+int	cntletter(char **map, char ltr);
 void get_map(int argc, char **argv, t_data *data);
-void print_string_array(char **array);
 
 #endif

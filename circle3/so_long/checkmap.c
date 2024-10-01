@@ -31,6 +31,11 @@ void	checksquare(int fd, int *rows, int *cols)
 		++(*rows);
 		if (*cols != (int)ft_strlen(line))
 		{
+			if (*cols == (int)ft_strlen(line) + 1 && line[ft_strlen(line)] == '\0')
+			{
+				free(temp);
+				break ;
+			}	
 			write(2, "Map not square\n", 15);
 			free(line);
 			exit(EXIT_FAILURE);
@@ -52,7 +57,7 @@ int	cntletter(char **map, char ltr)
 	while (map[i] != NULL)
 	{
 		j = 0;
-		while (map[i][j] != '\n')
+		while (map[i][j] != '\n' && map[i][j] != '\0')
 		{
 			if (map[i][j] == ltr)
 				cnt++;
@@ -61,6 +66,30 @@ int	cntletter(char **map, char ltr)
 		i++;
 	}
 	return (cnt);
+}
+
+void	forbidden_letter(char **map)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	i = 0;
+	while (map[i] != NULL)
+	{
+		j = 0;
+		while (map[i][j] != '\n' && map[i][j] != '\0')
+		{
+			if (map[i][j] != 'P' && map[i][j] != 'E' && map[i][j] != 'C' && map[i][j] != '0' && map[i][j] != '1')
+			{
+				free_map(map);
+				write(1, "Wrong letters in Map\n", 21);
+				exit(EXIT_FAILURE);
+			}
+			j++;
+		}
+		i++;
+	}
 }
 
 int	checkwalls(char **map, int cols, int rows)
@@ -92,23 +121,23 @@ void	inputcheck(char **map, int cols, int rows)
 	int	cntP;
 	int	cntC;
 	int	cntE;
-	int	wallcheck;
 
-	wallcheck = checkwalls(map, (cols - 1), (rows - 1));
 	cntP = cntletter(map, 'P');
 	cntE = cntletter(map, 'E');
 	cntC = cntletter(map, 'C');
 	if (cntP != 1 || cntE != 1 || cntC < 1)
 	{
-		write(1, "incorrect Player, Consumable or Exit number\n", 44);
+		free_map(map);
+		write(1, "Incorrect Player, Consumable or Exit number\n", 44);
 		exit(EXIT_FAILURE);
 	}
-	//free doublearray
-	if(!(wallcheck))
+	if(!(checkwalls(map, (cols - 1), (rows - 1))))
 	{
+		free_map(map);
 		write (1, "Walls wrong\n", 12);
 		exit(EXIT_FAILURE);
 	}
+	forbidden_letter(map);
 }
 
 char	**parseinput(int fd, int rows, int cols)
@@ -161,5 +190,4 @@ void	get_map(int argc, char **argv, t_data *data)
 	data->map = map;
 	data->rows = rows;
 	data->cols = cols - 1;
-//	print_string_array(map);
 }
