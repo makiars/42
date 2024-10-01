@@ -118,14 +118,7 @@ int	checkwalls(char **map, int cols, int rows)
 
 void	inputcheck(char **map, int cols, int rows)
 {
-	int	cntP;
-	int	cntC;
-	int	cntE;
-
-	cntP = cntletter(map, 'P');
-	cntE = cntletter(map, 'E');
-	cntC = cntletter(map, 'C');
-	if (cntP != 1 || cntE != 1 || cntC < 1)
+	if (cntletter(map, 'P') != 1 || cntletter(map, 'E') != 1 || cntletter(map, 'C') < 1)
 	{
 		free_map(map);
 		write(1, "Incorrect Player, Consumable or Exit number\n", 44);
@@ -154,7 +147,6 @@ char	**parseinput(int fd, int rows, int cols)
 	}
 	while (++i < rows)
 		map[i] = get_next_line(fd);
-	map[i] = get_next_line(fd);
 	map[i] = NULL;
 	inputcheck(map, cols, rows);
 	return (map);
@@ -170,24 +162,23 @@ void	openfile(int *fd, char **argv)
 	}
 }
 
-void	get_map(int argc, char **argv, t_data *data)
+void	get_map(char **argv, t_data *data)
 {
 	int		fd;
 	int		rows;
 	int		cols;
-	char	**map;
 
-	if (argc != 2)
-		exit (EXIT_FAILURE);
-	cols = 0;
 	rows = 0;
+	cols = 0;
 	openfile(&fd, argv);
 	checksquare(fd, &rows, &cols);
 	close(fd);
 	openfile(&fd, argv);
-	map = parseinput(fd, rows, cols);
+	data->map = parseinput(fd, rows, cols);
 	close(fd);
-	data->map = map;
+	openfile(&fd, argv);
+	data->flood_map = parseinput(fd, rows, cols);
+	close(fd);
 	data->rows = rows;
 	data->cols = cols - 1;
 }

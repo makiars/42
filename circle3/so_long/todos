@@ -1,9 +1,8 @@
--check if map is .ber file
--floofill alg
--check if assets exist
--map only valid if there is a newline at the end
--check funcheck,need to change change GNL
-
 DONE
 -empty map
 -check if other thingies are in map except defined letters
+-check if map is .ber file
+-check if assets exist
+-map only valid if there is a newline at the end
+-floofill alg
+-check funcheck,need to change change GNL

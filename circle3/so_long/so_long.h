@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-# include "./srcsGNL/get_next_line.h"
 # include <mlx.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
@@ -29,8 +28,12 @@ typedef struct s_data
 	void		*mlx_ptr;
 	void		*win_ptr;
 	char		**map;
+	char		**flood_map;
 	int			rows;
 	int			cols;
+	int			reachable;
+	int			collectables;
+	int			exit_found;
 //	Assets
 	char		*back_path;
 	char		*wall_path;
@@ -48,8 +51,10 @@ typedef struct s_data
 	int			Py;
 }	t_data;
 
+char *get_next_line(int fd);
+int	ft_strlen(const char *s);
 void free_map(char **map);
 int	cntletter(char **map, char ltr);
-void get_map(int argc, char **argv, t_data *data);
+void get_map(char **argv, t_data *data);
 
 #endif
