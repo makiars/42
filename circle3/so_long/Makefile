@@ -1,13 +1,12 @@
 NAME = so_long
 
-SRCS = window.c checkmap.c GNL.c
-
+SRCS = window.c checkmap.c GNL.c freefuncs.c playermove.c mlxinit.c checkvalid.c
 
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 RM = rm -f
 

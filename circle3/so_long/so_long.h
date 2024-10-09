@@ -28,9 +28,10 @@ typedef struct s_data
 	void		*mlx_ptr;
 	void		*win_ptr;
 	char		**map;
-	char		**flood_map;
 	int			rows;
 	int			cols;
+// For floodfill alg
+	char		**flood_map;
 	int			reachable;
 	int			collectables;
 	int			exit_found;
@@ -47,14 +48,23 @@ typedef struct s_data
 	void		*img_consumable;
 	void		*img_player;
 // Player location
-	int			Px;
-	int			Py;
+	int			px;
+	int			py;
+	int			movecnt;
 }	t_data;
 
-char *get_next_line(int fd);
-int	ft_strlen(const char *s);
-void free_map(char **map);
-int	cntletter(char **map, char ltr);
-void get_map(char **argv, t_data *data);
+char	*get_next_line(int fd);
+int		ft_strlen(const char *s);
+void	free_map(char **map);
+int		cntletter(char **map, char ltr);
+void	get_map(char **argv, t_data *data);
+void	free_images(t_data *data);
+void	free_map(char **map);
+int		on_destroy(t_data *data);
+void	playermove(int keycode, t_data *data);
+void	find_player(t_data *data);
+void	init_assets(t_data *data);
+void	inputcheck(char **map, int cols, int rows);
+void	checksquare(int fd, int *rows, int *cols);
 
 #endif
