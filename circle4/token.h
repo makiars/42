@@ -23,6 +23,7 @@ typedef struct s_token
 	int				type;
 	struct s_token	*next;
 	struct s_token	*prev;
+	struct s_token	**head;
 }	t_token;
 
 //for split
@@ -31,6 +32,8 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 char	*ft_strdup(const char *src);
 int	ft_strlen(const char *s);
 char	**ft_split(char const *s, char c);
+void printlist(t_token *head);
 //for testing
 void printCharPointerArray(char **arr);
+void printlist_type(t_token *head);
 #endif

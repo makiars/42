@@ -24,3 +24,32 @@ void print_words(t_token *head)
         current = current->next;
     }
 }
+
+void printlist(t_token *head)
+{
+    t_token *curr;
+
+    if (!head)
+        return;
+    curr = head;
+    while(curr)
+    {
+        printf("%s\n", curr->word);
+        curr = curr->next;
+    }
+}
+
+
+void printlist_type(t_token *head)
+{
+    t_token *curr;
+
+    if (!head)
+        return;
+    curr = head;
+    while(curr)
+    {
+        printf("%i\n", curr->type);
+        curr = curr->next;
+    }
+}

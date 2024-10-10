@@ -1,0 +1,25 @@
+
+| No. | Character | Meaning                      |
+|-----|-----------|------------------------------|
+|  1  | ~         | Home directory               |
+|  2  | `         | Command substitution (archaic)|
+|  3  | #         | Comment                      |
+|  4  | $         | Variable expression          |
+|  5  | &         | Background job               |
+|  6  | *         | String wildcard              |
+|  7  | (         | Start subshell               |
+|  8  | )         | End subshell                 |
+|  9  | \         | Quote next character         |
+| 10  | |         | Pipe                         |
+| 11  | [         | Start character-set wildcard |
+| 12  | ]         | End character-set wildcard   |
+| 13  | {         | Start command block          |
+| 14  | }         | End command block            |
+| 15  | ;         | Shell command separator      |
+| 16  | '         | Strong quote                 |
+| 17  | "         | Weak quote                   |
+| 18  | <         | Input redirect               |
+| 19  | >         | Output redirect              |
+| 20  | /         | Pathname directory separator |
+| 21  | ?         | Single-character wildcard    |
+| 22  | !         | Pipeline logical NOT         |
