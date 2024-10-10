@@ -72,8 +72,8 @@ int	main(int argc, char **argv)
 		return (2);
 	if (argc != 3)
 	{
-		write (2, "Format: ./client PID String\n", 28);
-		return (1);
+		write (1, "Format: ./client PID String\n", 28);
+		return (0);
 	}
 	send(pid, argv[2]);
 	i = 0;
