@@ -1,6 +1,5 @@
-Display number of moves!
-norminette
-Add error messages
+
+Add error message when missing texture
 
 
 DONE
@@ -11,3 +10,5 @@ DONE
 -map only valid if there is a newline at the end
 -floofill alg
 -check funcheck,need to change change GNL
+Display number of moves!
+norminette

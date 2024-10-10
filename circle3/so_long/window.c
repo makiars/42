@@ -32,10 +32,18 @@ int	is_ber(char *s)
 
 	len = ft_strlen(s);
 	if (len < 5)
+	{
+		write(2, "Error\n", 6);
+		write(2, "wrong file name\n", 16);
 		return (0);
+	}
 	if (s[len - 4] != '.' || s[len - 3] != 'b'
 		|| s[len - 2] != 'e' || s[len - 1] != 'r')
+	{
+		write(2, "Error\n", 6);
+		write(2, "wrong file name\n", 16);
 		return (0);
+	}
 	return (1);
 }
 
@@ -78,7 +86,7 @@ int	main(int argc, char **argv)
 	if (!data.mlx_ptr)
 		return (1);
 	data.win_ptr = mlx_new_window(data.mlx_ptr,
-			data.cols * 36, data.rows * 36, "so long");
+			data.cols * 36, data.rows * 36, "Kill your doppelganger");
 	if (!data.win_ptr)
 		return (free(data.mlx_ptr), 1);
 	find_player(&data);

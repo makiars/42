@@ -66,5 +66,6 @@ void	find_player(t_data *data);
 void	init_assets(t_data *data);
 void	inputcheck(char **map, int cols, int rows);
 void	checksquare(int fd, int *rows, int *cols);
+char	*ft_itoa(int n);
 
 #endif

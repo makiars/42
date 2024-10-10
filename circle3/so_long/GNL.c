@@ -50,7 +50,6 @@ char	*resize_buffer(char *buffer, int current_size)
 	return (new_buffer);
 }
 
-
 char	*read_until_newline(int fd, char *buffer, int *buffer_size, int *pos)
 {
 	char	ch;
@@ -59,7 +58,7 @@ char	*read_until_newline(int fd, char *buffer, int *buffer_size, int *pos)
 	bytes_read = read(fd, &ch, 1);
 	while (bytes_read > 0)
 	{
-		if (*pos >= *buffer_size - 1) 
+		if (*pos >= *buffer_size - 1)
 		{
 			buffer = resize_buffer(buffer, *buffer_size);
 			*buffer_size *= 2;

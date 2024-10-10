@@ -47,6 +47,23 @@ void	eval_keycode(int keycode, t_data *data, int *new_px, int *new_py)
 		*new_px = data->px + 1;
 }
 
+void	write_movecnt(t_data *data)
+{
+	char	*res;
+
+	res = ft_itoa(data->movecnt);
+	if (res == NULL)
+	{
+		write(2, "Error\n", 6);
+		write(2, "Malloc failed\n", 14);
+		on_destroy(data);
+		exit(EXIT_FAILURE);
+	}
+	write(1, res, ft_strlen(res));
+	write(1, "\n", 1);
+	free (res);
+}
+
 void	playermove(int keycode, t_data *data)
 {
 	int	new_px;
@@ -72,4 +89,5 @@ void	playermove(int keycode, t_data *data)
 	data->px = new_px;
 	data->py = new_py;
 	data->movecnt++;
+	write_movecnt(data);
 }
