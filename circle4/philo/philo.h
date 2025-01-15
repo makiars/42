@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/06 12:34:01 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:42:24 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,21 @@ typedef struct s_data
 	int			time_to_sleep;
 	int			has_to_eat_x;
 	uint64_t	start_time;
-	t_philo		*head;
-	//add philospher specific stuff here in a seperate struct
+	t_philo		*philo_head;
 }	t_data;
 
 typedef struct s_philo
 {
-	int				right_fork_state;
-	uint64_t		last_eaten;
-	struct s_philo	*next;
-	struct s_philo	*prev;
+	pthread_t			thread;		
+	int					id;
+	int					ate_x;
+	pthread_mutex_t		*right_fork;
+	pthread_mutex_t		*left_fork;
+	uint64_t			last_eaten;
+	int					state;
+	struct s_philo		*next;
+	struct s_philo		*prev;
 }	t_philo;
-
 
 char	*ft_itoa(int n);
 int		ft_atoi(const char *nptr);

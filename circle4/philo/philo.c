@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/06 12:38:29 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:56:29 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,30 @@ long long	curr_time(t_data	*core)
 	return ((long long)get_time_ms() - core->start_time);
 }
 
-void	init_threads(t_data *core)
+void thread_start(t_data *core)
 {
 	int	i;
 
-	i = 0;
 	while(i < core->num_philo)
 	{
-		
+		printf("yes");
 		i++;
 	}
+}
 
+void	init_threads(t_data *core)
+{
+
+	pthread_t t1;
+	
+	if (pthread_create(&t1, NULL, &thread_start,core) != 0)
+	{
+		exit(2);
+	}
+	if (pthread_join(t1, NULL) != 0)
+	{
+		exit(2);
+	}
 }
 
 int	main(int argc, char **argv)
