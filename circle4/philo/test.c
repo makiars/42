@@ -28,6 +28,7 @@ typedef struct s_data
 	int             has_to_eat_x;
 	uint64_t        start_time;
 	t_philo         *philo_head;
+	pthread_mutex_t *forks;
 } t_data;
 
 // Function prototypes
@@ -81,8 +82,8 @@ void initialize_threads(t_data *data)
 	t_philo *current;
 
 	// Allocate memory for philosophers and forks
-	pthread_mutex_t *forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
-	if (!forks)
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
+	if (!(data->forks))
 	{
 		fprintf(stderr, "Error: Failed to allocate memory for forks.\n");
 		exit(EXIT_FAILURE);
@@ -90,7 +91,7 @@ void initialize_threads(t_data *data)
 
 	// Initialize forks
 	for (i = 0; i < data->num_philo; i++)
-		pthread_mutex_init(&forks[i], NULL);
+		pthread_mutex_init(&data->forks[i], NULL);
 
 	// Initialize philosophers
 	for (i = 0; i < data->num_philo; i++)
@@ -104,8 +105,8 @@ void initialize_threads(t_data *data)
 		current->id = i + 1;
 		current->ate_x = 0;
 		current->last_eaten = data->start_time;
-		current->left_fork = &forks[i];
-		current->right_fork = &forks[(i + 1) % data->num_philo];
+		current->left_fork = &data->forks[i];
+		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->next = (i == data->num_philo - 1) ? data->philo_head : NULL;
 		if (data->philo_head)
 		{
@@ -143,6 +144,6 @@ void initialize_threads(t_data *data)
 
 	// Free resources
 	for (i = 0; i < data->num_philo; i++)
-		pthread_mutex_destroy(&forks[i]);
-	free(forks);
+		pthread_mutex_destroy(&data->forks[i]);
+	free(data->forks);
 }
