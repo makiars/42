@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/15 13:56:29 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:38:58 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@ void	print_state(int ms, int philo, int state)
 		printf("%d %d is thinking\n", ms, philo);
 	if (state == 5)
 		printf("%d %d died\n", ms, philo);
+}
+
+t_data	*address_getter(t_data *core)
+{
+	static t_data	*new_core;
+
+	if (core == NULL)
+		return (new_core);
+	else
+	{
+		new_core = core;
+		return (new_core);
+	}
 }
 
 uint64_t	get_time_ms(void)
@@ -71,10 +84,12 @@ long long	curr_time(t_data	*core)
 	return ((long long)get_time_ms() - core->start_time);
 }
 
+/*
 void thread_start(t_data *core)
 {
 	int	i;
 
+	i = 0;
 	while(i < core->num_philo)
 	{
 		printf("yes");
@@ -84,7 +99,6 @@ void thread_start(t_data *core)
 
 void	init_threads(t_data *core)
 {
-
 	pthread_t t1;
 	
 	if (pthread_create(&t1, NULL, &thread_start,core) != 0)
@@ -96,6 +110,7 @@ void	init_threads(t_data *core)
 		exit(2);
 	}
 }
+*/
 
 int	main(int argc, char **argv)
 {
@@ -103,7 +118,8 @@ int	main(int argc, char **argv)
 
 	(void) argc;
 	init_core(&core, argc, argv);
-	usleep(2000000);
-	printf("%lld\n", (long long)curr_time(&core));
+	address_getter(&core);
+	initialize_threads(&core);
+	//printf("%lld\n", (long long)curr_time(&core));
 }
 

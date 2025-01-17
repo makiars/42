@@ -1,130 +1,121 @@
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <sys/time.h>
 
-// Define structs as provided
-typedef struct s_philo
-{
-	pthread_t        thread;
-	int              id;
-	int              ate_x;
-	pthread_mutex_t  *right_fork;
-	pthread_mutex_t  *left_fork;
-	uint64_t         last_eaten;
-	int              state;
-	struct s_philo   *next;
-	struct s_philo   *prev;
-} t_philo;
-
-typedef struct s_data
-{
-	int             num_philo;
-	int             time_to_die;
-	int             time_to_eat;
-	int             time_to_sleep;
-	int             has_to_eat_x;
-	uint64_t        start_time;
-	t_philo         *philo_head;
-	pthread_mutex_t *forks;
-} t_data;
-
-// Function prototypes
-uint64_t get_time(void);
-void *philosopher_routine(void *arg);
-void initialize_threads(t_data *data);
-
-uint64_t get_time(void)
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
+#include "philo.h"
 
 void *philosopher_routine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
-
+	t_data *core = address_getter(NULL);
+	
 	while (1)
 	{
 		// Simulate thinking
-		printf("Philosopher %d is thinking.\n", philo->id);
-		usleep(1000 * 500); // Simulate time for thinking
-
+		philo->state = THINKING;
+		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		
+		if (philo->should_eat == 1)
+		{
 		// Take forks
+		philo->state = TAKEN_FORK;
+		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
 		pthread_mutex_lock(philo->left_fork);
-		printf("Philosopher %d picked up left fork.\n", philo->id);
+
+		philo->state = TAKEN_FORK;
+		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
 		pthread_mutex_lock(philo->right_fork);
-		printf("Philosopher %d picked up right fork.\n", philo->id);
 
 		// Simulate eating
-		philo->last_eaten = get_time();
-		printf("Philosopher %d is eating.\n", philo->id);
-		usleep(1000 * 500); // Simulate time for eating
+		philo->last_eaten = get_time_ms();
+		philo->state = EATING;
+		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		usleep(1000 * core->time_to_eat);
 
 		// Release forks
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
-		printf("Philosopher %d put down forks.\n", philo->id);
-
+		}
+		else
+			usleep(1000 * 500); // Simulate time for thinking
 		// Simulate sleeping
-		printf("Philosopher %d is sleeping.\n", philo->id);
-		usleep(1000 * 500); // Simulate time for sleeping
+		philo->state = SLEEPING;
+		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		usleep(1000 * core->time_to_sleep);
 	}
 	return NULL;
 }
 
-void initialize_threads(t_data *data)
+void malloc_and_init_mutex(t_data *data)
 {
-	int i;
-	t_philo *current;
+	int		i;
 
-	// Allocate memory for philosophers and forks
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
 	if (!(data->forks))
 	{
 		fprintf(stderr, "Error: Failed to allocate memory for forks.\n");
 		exit(EXIT_FAILURE);
 	}
-
-	// Initialize forks
-	for (i = 0; i < data->num_philo; i++)
+	i = -1;
+	while (++i < data->num_philo)
 		pthread_mutex_init(&data->forks[i], NULL);
+}
 
-	// Initialize philosophers
-	for (i = 0; i < data->num_philo; i++)
-	{
-		current = malloc(sizeof(t_philo));
-		if (!current)
-		{
-			fprintf(stderr, "Error: Failed to allocate memory for philosopher.\n");
-			exit(EXIT_FAILURE);
-		}
-		current->id = i + 1;
-		current->ate_x = 0;
-		current->last_eaten = data->start_time;
-		current->left_fork = &data->forks[i];
-		current->right_fork = &data->forks[(i + 1) % data->num_philo];
-		current->next = (i == data->num_philo - 1) ? data->philo_head : NULL;
-		if (data->philo_head)
-		{
-			current->prev = data->philo_head->prev;
-			data->philo_head->prev->next = current;
-			data->philo_head->prev = current;
-		}
-		else
-		{
-			data->philo_head = current;
-			current->prev = current;
-			current->next = current;
-		}
-	}
+void init_philo(t_data *data)
+{
+    int     i;
+    t_philo *current;
+    t_philo *last = NULL;
 
-	// Start philosopher threads
+	i = -1;
+    while (++i < data->num_philo)
+    {
+        current = malloc(sizeof(t_philo));
+        if (!current)
+        {
+            fprintf(stderr, "Error: Failed to allocate memory for philosopher.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        // Initialize current philosopher
+        current->id = i + 1;
+        current->ate_x = 0;
+        current->last_eaten = data->start_time;
+        current->left_fork = &data->forks[i];
+        current->right_fork = &data->forks[(i + 1) % data->num_philo];
+
+        if (i == 0)
+        {
+            // First philosopher
+			current->should_eat = 0;
+            data->philo_head = current;  // Assign head
+            current->prev = current;    // Circular link
+            current->next = current;    // Circular link
+        }
+        else
+        {
+			
+            // Link to the previous philosopher
+            current->prev = last;
+			if (current->prev->should_eat == 0)
+				current->should_eat = 1;
+			else
+				current->should_eat = 0;
+            last->next = current;
+            current->next = data->philo_head;
+            data->philo_head->prev = current; // Update head's prev
+        }
+
+        last = current; // Update last to current
+    }
+}
+
+
+void create_threads(t_data *data)
+{
+	int		i;
+	t_philo *current;
+
 	current = data->philo_head;
-	for (i = 0; i < data->num_philo; i++)
+	i = -1;
+	while (++i < data->num_philo)
 	{
 		if (pthread_create(&current->thread, NULL, philosopher_routine, current) != 0)
 		{
@@ -133,17 +124,37 @@ void initialize_threads(t_data *data)
 		}
 		current = current->next;
 	}
+}
 
-	// Join philosopher threads (in this simulation, they run indefinitely)
+void join_threads(t_data *data)
+{
+	int		i;
+	t_philo *current;
+
 	current = data->philo_head;
-	for (i = 0; i < data->num_philo; i++)
+	i = -1;
+	while (++i < data->num_philo)
 	{
 		pthread_join(current->thread, NULL);
 		current = current->next;
 	}
+}
 
-	// Free resources
-	for (i = 0; i < data->num_philo; i++)
+void free_threads(t_data *data)
+{
+	int		i;
+
+	i = -1;
+	while (++i < data->num_philo)
 		pthread_mutex_destroy(&data->forks[i]);
 	free(data->forks);
+}
+
+void initialize_threads(t_data *data)
+{
+
+	malloc_and_init_mutex(data);
+	init_philo(data);
+	create_threads(data);
+	free_threads(data);
 }

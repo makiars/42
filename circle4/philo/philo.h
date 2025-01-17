@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/15 12:42:24 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:51:55 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,11 @@
 # include "sys/time.h"
 # include "stdint.h"
 
-typedef struct s_data
-{
-	int			num_philo;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			has_to_eat_x;
-	uint64_t	start_time;
-	t_philo		*philo_head;
-}	t_data;
+#  define TAKEN_FORK 1
+#  define EATING 2
+#  define SLEEPING 3
+#  define THINKING 4
+#  define DIED 5
 
 typedef struct s_philo
 {
@@ -41,11 +36,30 @@ typedef struct s_philo
 	pthread_mutex_t		*left_fork;
 	uint64_t			last_eaten;
 	int					state;
+	int					should_eat;
 	struct s_philo		*next;
 	struct s_philo		*prev;
 }	t_philo;
 
-char	*ft_itoa(int n);
-int		ft_atoi(const char *nptr);
+typedef struct s_data
+{
+	int			num_philo;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			has_to_eat_x;
+	uint64_t	start_time;
+	t_philo		*philo_head;
+	pthread_mutex_t *forks;
+}	t_data;
+
+
+
+char		*ft_itoa(int n);
+int			ft_atoi(const char *nptr);
+void		initialize_threads(t_data *data);
+t_data		*address_getter(t_data *core);
+uint64_t	get_time_ms(void);
+void		print_state(int ms, int philo, int state);
 
 #endif
