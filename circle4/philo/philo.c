@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/17 13:38:58 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:36:15 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	init_core(t_data *core, int argc, char **argv)
 	while (i < argc)
 	{
 		temp = ft_atoi(argv[i]);
-		printf("%s %s\n", ft_itoa(temp), argv[i]);
 		if (strcmp(ft_itoa(temp), argv[i]) != 0)
 		{
 			printf("use proper numbers, friend\n");
@@ -84,34 +83,6 @@ long long	curr_time(t_data	*core)
 	return ((long long)get_time_ms() - core->start_time);
 }
 
-/*
-void thread_start(t_data *core)
-{
-	int	i;
-
-	i = 0;
-	while(i < core->num_philo)
-	{
-		printf("yes");
-		i++;
-	}
-}
-
-void	init_threads(t_data *core)
-{
-	pthread_t t1;
-	
-	if (pthread_create(&t1, NULL, &thread_start,core) != 0)
-	{
-		exit(2);
-	}
-	if (pthread_join(t1, NULL) != 0)
-	{
-		exit(2);
-	}
-}
-*/
-
 int	main(int argc, char **argv)
 {
 	t_data	core;
@@ -120,6 +91,7 @@ int	main(int argc, char **argv)
 	init_core(&core, argc, argv);
 	address_getter(&core);
 	initialize_threads(&core);
+	
 	//printf("%lld\n", (long long)curr_time(&core));
 }
 

@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/17 13:51:55 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:37:18 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,6 @@ void		initialize_threads(t_data *data);
 t_data		*address_getter(t_data *core);
 uint64_t	get_time_ms(void);
 void		print_state(int ms, int philo, int state);
+long long	curr_time(t_data *core);
 
 #endif

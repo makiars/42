@@ -10,35 +10,39 @@ void *philosopher_routine(void *arg)
 	{
 		// Simulate thinking
 		philo->state = THINKING;
-		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		print_state(curr_time(core) , philo->id, philo->state);
 		
 		if (philo->should_eat == 1)
 		{
 		// Take forks
 		philo->state = TAKEN_FORK;
-		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		print_state(curr_time(core), philo->id, philo->state);
 		pthread_mutex_lock(philo->left_fork);
 
 		philo->state = TAKEN_FORK;
-		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		print_state(curr_time(core), philo->id, philo->state);
 		pthread_mutex_lock(philo->right_fork);
 
 		// Simulate eating
 		philo->last_eaten = get_time_ms();
 		philo->state = EATING;
-		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
+		print_state(curr_time(core), philo->id, philo->state);
 		usleep(1000 * core->time_to_eat);
 
 		// Release forks
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
+		philo->next->should_eat = 1;
+		philo->should_eat = 0;
+
+		// Sleep
+		philo->state = SLEEPING;
+		print_state(curr_time(core), philo->id, philo->state);
+		usleep(1000 * core->time_to_sleep);
 		}
 		else
-			usleep(1000 * 500); // Simulate time for thinking
-		// Simulate sleeping
-		philo->state = SLEEPING;
-		print_state(get_time_ms() - core->start_time, philo->id, philo->state);
-		usleep(1000 * core->time_to_sleep);
+			usleep(1000 * core->time_to_die/4);
+
 	}
 	return NULL;
 }
@@ -73,8 +77,6 @@ void init_philo(t_data *data)
             fprintf(stderr, "Error: Failed to allocate memory for philosopher.\n");
             exit(EXIT_FAILURE);
         }
-
-        // Initialize current philosopher
         current->id = i + 1;
         current->ate_x = 0;
         current->last_eaten = data->start_time;
@@ -83,16 +85,13 @@ void init_philo(t_data *data)
 
         if (i == 0)
         {
-            // First philosopher
 			current->should_eat = 0;
-            data->philo_head = current;  // Assign head
-            current->prev = current;    // Circular link
-            current->next = current;    // Circular link
+            data->philo_head = current;
+            current->prev = current;
+            current->next = current;
         }
         else
         {
-			
-            // Link to the previous philosopher
             current->prev = last;
 			if (current->prev->should_eat == 0)
 				current->should_eat = 1;
@@ -100,10 +99,10 @@ void init_philo(t_data *data)
 				current->should_eat = 0;
             last->next = current;
             current->next = data->philo_head;
-            data->philo_head->prev = current; // Update head's prev
+            data->philo_head->prev = current;
         }
 
-        last = current; // Update last to current
+        last = current;
     }
 }
 
@@ -156,5 +155,6 @@ void initialize_threads(t_data *data)
 	malloc_and_init_mutex(data);
 	init_philo(data);
 	create_threads(data);
+	join_threads(data);
 	free_threads(data);
 }
