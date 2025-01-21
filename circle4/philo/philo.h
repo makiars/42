@@ -32,6 +32,7 @@ typedef struct s_philo
 	pthread_t			thread;		
 	int					id;
 	int					ate_x;
+	int			has_died;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	uint64_t			last_eaten;
@@ -62,5 +63,10 @@ t_data		*address_getter(t_data *core);
 uint64_t	get_time_ms(void);
 void		print_state(int ms, int philo, int state);
 long long	curr_time(t_data *core);
+void		precise_sleep(uint64_t milliseconds);
+uint64_t	get_time_ms(void);
+void *philosopher_routine(void *arg);
+
+
 
 #endif

@@ -39,13 +39,6 @@ t_data	*address_getter(t_data *core)
 	}
 }
 
-uint64_t	get_time_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((uint64_t)(tv.tv_sec) * 1000 + (uint64_t)(tv.tv_usec) / 1000);
-}
 
 void	init_core(t_data *core, int argc, char **argv)
 {
@@ -78,20 +71,13 @@ void	init_core(t_data *core, int argc, char **argv)
 	core->start_time = get_time_ms();
 }
 
-long long	curr_time(t_data	*core)
-{
-	return ((long long)get_time_ms() - core->start_time);
-}
-
 int	main(int argc, char **argv)
 {
 	t_data	core;
 
-	(void) argc;
 	init_core(&core, argc, argv);
 	address_getter(&core);
 	initialize_threads(&core);
 	
-	//printf("%lld\n", (long long)curr_time(&core));
 }
 
