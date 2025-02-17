@@ -67,18 +67,18 @@ void *philosopher_routine(void *arg)
         should_eat = philo->should_eat;
         pthread_mutex_unlock(&philo->should_eat_mutex);
 
-		if (should_eat == 1)
+		if ((uint64_t)core->time_to_die <  curr_time(core) - philo->last_eaten)
+		{
+			philo->state = DIED;
+			print_state(core, philo->id, philo->state);
+			exit(0);
+		}
+		else if (should_eat == 1)
 		{
 			p_take_fork(core, philo);
 			p_eat(core, philo);
 			p_release_fork(philo);
 			p_sleep(core, philo);
-		}
-		else if ((uint64_t)core->time_to_die <  curr_time(core) - philo->last_eaten)
-		{
-			philo->state = DIED;
-			print_state(core, philo->id, philo->state);
-			exit(0);
 		}
 		else
 			precise_sleep_with_curr_time(core, core->time_to_eat);

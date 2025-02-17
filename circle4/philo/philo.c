@@ -6,33 +6,18 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 16:51:12 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:58:29 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*
-void print_state(t_data *core, int philo, int state)
-{
-	int	ms;
-	
-	ms = curr_time(core);
-	pthread_mutex_lock(&core->print_mutex);
-	if (state == 1) printf("%d %d has taken a fork\n", ms, philo);
-	else if (state == 2) printf("%d %d is eating\n", ms, philo);
-	else if (state == 3) printf("%d %d is sleeping\n", ms, philo);
-	else if (state == 4) printf("%d %d is thinking\n", ms, philo);
-	else if (state == 5) printf("%d %d died\n", ms, philo);
-	pthread_mutex_unlock(&core->print_mutex);
-}
-*/
+
 void print_state(t_data *core, int philo, int state)
 {
     int ms = curr_time(core);
     char *msg;
 
-    // Map state to message
     if (state == TAKEN_FORK) msg = "has taken a fork";
     else if (state == EATING) msg = "is eating";
     else if (state == SLEEPING) msg = "is sleeping";
@@ -40,7 +25,6 @@ void print_state(t_data *core, int philo, int state)
     else if (state == DIED) msg = "died";
     else return;
 
-    // Lock, print, and unlock quickly
     pthread_mutex_lock(&core->print_mutex);
     printf("%d %d %s\n", ms, philo, msg);
     pthread_mutex_unlock(&core->print_mutex);
