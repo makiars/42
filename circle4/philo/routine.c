@@ -15,9 +15,7 @@ void p_take_fork(t_data *core, t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
 	}
-
 	print_state(core, philo->id, philo->state);
-
 	print_state(core, philo->id, philo->state);
 
 
@@ -29,7 +27,7 @@ void p_eat(t_data *core, t_philo *philo)
 	philo->state = EATING;
 	print_state(core, philo->id, philo->state);
 
-	precise_sleep(core->time_to_eat);
+	precise_sleep_with_curr_time(core, core->time_to_eat);
 }
 
 void p_release_fork(t_philo *philo)
@@ -51,7 +49,7 @@ void p_sleep(t_data *core, t_philo *philo)
 	philo->state = SLEEPING;
 	print_state(core, philo->id, philo->state);
 
-	precise_sleep(core->time_to_sleep);
+	precise_sleep_with_curr_time(core, core->time_to_sleep);
 }
 
 void *philosopher_routine(void *arg)
@@ -83,7 +81,7 @@ void *philosopher_routine(void *arg)
 			exit(0);
 		}
 		else
-			precise_sleep(core->time_to_eat);
+			precise_sleep_with_curr_time(core, core->time_to_eat);
 	}
 	return NULL;
 }

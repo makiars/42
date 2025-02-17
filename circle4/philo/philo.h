@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 16:06:43 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:37:12 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ void		initialize_threads(t_data *data);
 t_data		*address_getter(t_data *core);
 uint64_t	get_time_us(void);
 void		print_state(t_data *core, int philo, int state);
-long long	curr_time(t_data *core);
-void		precise_sleep(uint64_t milliseconds);
+uint64_t	curr_time(t_data *core);
+//void		precise_sleep(uint64_t milliseconds);
+void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds);
 void *philosopher_routine(void *arg);
 
 

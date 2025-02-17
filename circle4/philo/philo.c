@@ -6,12 +6,13 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 12:28:06 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:51:12 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*
 void print_state(t_data *core, int philo, int state)
 {
 	int	ms;
@@ -25,7 +26,25 @@ void print_state(t_data *core, int philo, int state)
 	else if (state == 5) printf("%d %d died\n", ms, philo);
 	pthread_mutex_unlock(&core->print_mutex);
 }
+*/
+void print_state(t_data *core, int philo, int state)
+{
+    int ms = curr_time(core);
+    char *msg;
 
+    // Map state to message
+    if (state == TAKEN_FORK) msg = "has taken a fork";
+    else if (state == EATING) msg = "is eating";
+    else if (state == SLEEPING) msg = "is sleeping";
+    else if (state == THINKING) msg = "is thinking";
+    else if (state == DIED) msg = "died";
+    else return;
+
+    // Lock, print, and unlock quickly
+    pthread_mutex_lock(&core->print_mutex);
+    printf("%d %d %s\n", ms, philo, msg);
+    pthread_mutex_unlock(&core->print_mutex);
+}
 
 t_data	*address_getter(t_data *core)
 {

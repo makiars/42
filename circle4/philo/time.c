@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 16:23:38 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:36:55 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,28 @@ uint64_t	get_time_us(void)
 	return ((uint64_t)(tv.tv_sec) * 1000000 + (uint64_t)(tv.tv_usec));
 }
 
-long long curr_time(t_data *core)
+uint64_t curr_time(t_data *core)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     uint64_t now_us = tv.tv_sec * 1000000 + tv.tv_usec;
-    return (now_us - core->start_time) / 1000;
+    return ((now_us - core->start_time) / 1000);
 }
 
-
-void precise_sleep(uint64_t milliseconds)
+void precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds)
 {
-    struct timeval start, current;
-    uint64_t elapsed_us = 0;
-    uint64_t target_us = milliseconds * 1000;
+    uint64_t start_ms = curr_time(core);
+    uint64_t target_ms = start_ms + milliseconds;
 
-    gettimeofday(&start, NULL);
-    while (elapsed_us < target_us)
+    while (curr_time(core) < target_ms)
     {
-        usleep(10);
-        gettimeofday(&current, NULL);
-        elapsed_us = (current.tv_sec - start.tv_sec) * 1000000 +
-                     (current.tv_usec - start.tv_usec);
+        uint64_t remaining_ms = target_ms - curr_time(core);
+        if (remaining_ms > 1)
+            usleep((remaining_ms - 1) * 1000); // sleep in chunks
     }
 }
+
+
+
+
 
