@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 12:19:38 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:23:38 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ long long curr_time(t_data *core)
     struct timeval tv;
     gettimeofday(&tv, NULL);
     uint64_t now_us = tv.tv_sec * 1000000 + tv.tv_usec;
-    return (now_us - core->start_time) / 1000; // Convert back to ms for printing
+    return (now_us - core->start_time) / 1000;
 }
 
 

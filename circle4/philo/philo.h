@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 12:15:47 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:06:43 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@ typedef struct s_philo
 	pthread_t			thread;		
 	int					id;
 	int					ate_x;
-	int			has_died;
+	int					has_died;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	uint64_t			last_eaten;
 	int					state;
+	pthread_mutex_t		should_eat_mutex;
 	int					should_eat;
 	struct s_philo		*next;
 	struct s_philo		*prev;

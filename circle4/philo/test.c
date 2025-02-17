@@ -37,6 +37,7 @@ void init_philo(t_data *data)
 		current->left_fork = &data->forks[i];
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->last_eaten = curr_time(address_getter(NULL));
+		pthread_mutex_init(&current->should_eat_mutex, NULL);
 		if (i == 0)
 		{
 			current->should_eat = 0;
@@ -94,11 +95,20 @@ void join_threads(t_data *data)
 void free_threads(t_data *data)
 {
 	int		i;
+	t_philo *current = data->philo_head;
 
 	i = -1;
 	while (++i < data->num_philo)
 		pthread_mutex_destroy(&data->forks[i]);
 	free(data->forks);
+	i = -1;
+    while (++i < data->num_philo)
+    {
+        pthread_mutex_destroy(&current->should_eat_mutex);
+        t_philo *next = current->next;
+        free(current);
+        current = next;
+    }
 }
 
 void initialize_threads(t_data *data)
