@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/01/20 11:37:18 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:15:47 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_data
 	uint64_t	start_time;
 	t_philo		*philo_head;
 	pthread_mutex_t *forks;
+	pthread_mutex_t print_mutex;
 }	t_data;
 
 
@@ -60,11 +61,10 @@ char		*ft_itoa(int n);
 int			ft_atoi(const char *nptr);
 void		initialize_threads(t_data *data);
 t_data		*address_getter(t_data *core);
-uint64_t	get_time_ms(void);
-void		print_state(int ms, int philo, int state);
+uint64_t	get_time_us(void);
+void		print_state(t_data *core, int philo, int state);
 long long	curr_time(t_data *core);
 void		precise_sleep(uint64_t milliseconds);
-uint64_t	get_time_ms(void);
 void *philosopher_routine(void *arg);
 
 

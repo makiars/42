@@ -4,9 +4,11 @@
 void p_take_fork(t_data *core, t_philo *philo)
 {
 	philo->state = TAKEN_FORK;
-	print_state(curr_time(core), philo->id, philo->state);
+	print_state(core, philo->id, philo->state);
+
 	pthread_mutex_lock(philo->left_fork);
-	print_state(curr_time(core), philo->id, philo->state);
+	print_state(core, philo->id, philo->state);
+
 	pthread_mutex_lock(philo->right_fork);
 }
 
@@ -14,7 +16,8 @@ void p_eat(t_data *core, t_philo *philo)
 {
 	philo->last_eaten = curr_time(core);
 	philo->state = EATING;
-	print_state(curr_time(core), philo->id, philo->state);
+	print_state(core, philo->id, philo->state);
+
 	precise_sleep(core->time_to_eat);
 }
 
@@ -29,7 +32,8 @@ void p_release_fork(t_philo *philo)
 void p_sleep(t_data *core, t_philo *philo)
 {
 	philo->state = SLEEPING;
-	print_state(curr_time(core), philo->id, philo->state);
+	print_state(core, philo->id, philo->state);
+
 	precise_sleep(core->time_to_sleep);
 }
 
@@ -41,7 +45,8 @@ void *philosopher_routine(void *arg)
 	while (1)
 	{
 		philo->state = THINKING;
-		print_state(curr_time(core) , philo->id, philo->state);
+		print_state(core, philo->id, philo->state);
+
 		//printf("philonum:%d curr:%llu last_eaten:%lu\n", philo->id,curr_time(core), philo->last_eaten);
 		if (philo->should_eat == 1)
 		{
@@ -53,7 +58,8 @@ void *philosopher_routine(void *arg)
 		else if ((uint64_t)core->time_to_die <  curr_time(core) - philo->last_eaten)
 		{
 			philo->state = DIED;
-			print_state(curr_time(core) , philo->id, DIED);
+			print_state(core, philo->id, philo->state);
+
 			exit(0);
 		}
 		else
