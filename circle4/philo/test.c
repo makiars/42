@@ -75,6 +75,7 @@ void create_threads(t_data *data)
 		}
 		current = current->next;
 	}
+	data->start_flag = 1;
 }
 
 void join_threads(t_data *data)

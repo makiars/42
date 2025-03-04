@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/04 12:52:10 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:48:11 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	init_core(t_data *core, int argc, char **argv)
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	core->start_time = get_time_us();
-
+	core->start_flag = 0;
 }
 
 int	main(int argc, char **argv)

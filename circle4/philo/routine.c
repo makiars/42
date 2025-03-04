@@ -49,6 +49,8 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     t_data *core = address_getter(NULL);
 
+    while (core->start_flag == 0)
+        usleep(100);
     while (1)
     {
 		check_if_died(core, philo);
