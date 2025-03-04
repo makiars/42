@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 17:58:29 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:52:10 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,3 +89,12 @@ int	main(int argc, char **argv)
 	
 }
 
+void check_if_died(t_data *core, t_philo *philo)
+{
+    if ((uint64_t)core->time_to_die < curr_time(core) - philo->last_eaten)
+    {
+        philo->state = DIED;
+        print_state(core, philo->id, philo->state);
+        exit(0);
+    }
+}

@@ -32,16 +32,8 @@ void p_eat(t_data *core, t_philo *philo)
 
 void p_release_fork(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
-
-    pthread_mutex_lock(&philo->next->should_eat_mutex);
-    philo->next->should_eat = 1;
-    pthread_mutex_unlock(&philo->next->should_eat_mutex);
-
-    pthread_mutex_lock(&philo->should_eat_mutex);
-    philo->should_eat = 0;
-    pthread_mutex_unlock(&philo->should_eat_mutex);
+    pthread_mutex_unlock(philo->right_fork);
+    pthread_mutex_unlock(philo->left_fork);
 }
 
 void p_sleep(t_data *core, t_philo *philo)
@@ -54,34 +46,38 @@ void p_sleep(t_data *core, t_philo *philo)
 
 void *philosopher_routine(void *arg)
 {
-	t_philo *philo = (t_philo *)arg;
-	t_data *core = address_getter(NULL);
-	int	should_eat;
+    t_philo *philo = (t_philo *)arg;
+    t_data *core = address_getter(NULL);
 
-	while (1)
-	{
-		philo->state = THINKING;
-		print_state(core, philo->id, philo->state);
-
-        pthread_mutex_lock(&philo->should_eat_mutex);
-        should_eat = philo->should_eat;
-        pthread_mutex_unlock(&philo->should_eat_mutex);
-
-		if ((uint64_t)core->time_to_die <  curr_time(core) - philo->last_eaten)
-		{
-			philo->state = DIED;
-			print_state(core, philo->id, philo->state);
-			exit(0);
-		}
-		else if (should_eat == 1)
-		{
-			p_take_fork(core, philo);
-			p_eat(core, philo);
-			p_release_fork(philo);
-			p_sleep(core, philo);
-		}
-		else
-			precise_sleep_with_curr_time(core, core->time_to_eat);
-	}
-	return NULL;
+    while (1)
+    {
+		check_if_died(core, philo);
+        if (philo->id % 2 != 0)
+        {
+            uint64_t desired_start = philo->last_eaten + philo->start_delay;
+            uint64_t now = curr_time(core);
+            if (now < desired_start)
+            {
+                precise_sleep_with_curr_time(core, desired_start - now);
+            }
+        }
+        philo->state = THINKING;
+        print_state(core, philo->id, philo->state);
+        if ((uint64_t)core->time_to_die < curr_time(core) - philo->last_eaten)
+        {
+            philo->state = DIED;
+            print_state(core, philo->id, philo->state);
+            exit(0);
+        }
+		check_if_died(core, philo);
+        p_take_fork(core, philo);
+		check_if_died(core, philo);
+        p_eat(core, philo);
+		check_if_died(core, philo);
+        p_release_fork(philo);
+		check_if_died(core, philo);
+        p_sleep(core, philo);
+    }
+    return NULL;
 }
+
