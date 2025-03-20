@@ -40,7 +40,9 @@ void init_philo(t_data *data)
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->last_eaten = curr_time(address_getter(NULL));
 		pthread_mutex_init(&current->should_eat_mutex, NULL);
-		if ((current->id % 2) != 0)
+		if (current->id == data->num_philo && data->num_philo % 2 != 0)
+			current->start_delay = data->time_to_eat *2;
+		else if ((current->id % 2) != 0)
             current->start_delay = data->time_to_eat;
         else
             current->start_delay = 0;

@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"random": "c",
+		"ft_printf.c": "cpp"
+	}
+}

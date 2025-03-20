@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 11:32:27 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:57:48 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,39 +21,32 @@ uint64_t	get_time_us(void)
 	return ((uint64_t)(tv.tv_sec) * 1000000 + (uint64_t)(tv.tv_usec));
 }
 
-uint64_t curr_time(t_data *core)
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    uint64_t now_us = tv.tv_sec * 1000000 + tv.tv_usec;
-    return (now_us - core->start_time);
+uint64_t curr_time(t_data *core) {
+    uint64_t current_us = get_time_us();
+    return ((current_us / 100) * 100) - core->start_time;
 }
 
-void precise_sleep_with_curr_time(t_data *core, uint64_t target_us)
+void precise_sleep_with_curr_time(t_data *core, uint64_t target_us, t_philo *philo)
 {
-    (void) core;
-    uint64_t start_us = get_time_us();
+    uint64_t start_us = curr_time(core);
     volatile uint64_t elapsed, rem;
-
-    while ((elapsed = get_time_us() - start_us) < target_us)
+    
+ 
+    elapsed = curr_time(core) - start_us;
+    while (elapsed < target_us)
     {
         rem = target_us - elapsed;
-        if (rem > 1000)
+        if (rem > 1500)
         {
-            usleep(rem / 2);
+            check_if_died(core, philo);
+            usleep(100);
         }
         else
         {
-            while (get_time_us() - start_us < target_us)
+            while (curr_time(core) - start_us < target_us)
                 ;
             break;
         }
+        elapsed = curr_time(core) - start_us;
     }
 }
-
-
-
-
-
-
-

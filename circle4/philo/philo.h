@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 10:25:33 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:15:20 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "pthread.h"
 # include "sys/time.h"
 # include "stdint.h"
+# include "./ft_printf/ft_printf.h"
 
 #  define TAKEN_FORK 1
 #  define EATING 2
@@ -54,7 +55,9 @@ typedef struct s_data
     t_philo             *philo_head;
     pthread_mutex_t     *forks;
     pthread_mutex_t     print_mutex;
+	pthread_mutex_t     died_mutex;
     pthread_mutex_t     start_mutex;
+	volatile int		someone_died;
 }   t_data;
 
 
@@ -69,9 +72,10 @@ uint64_t	get_time_us(void);
 void		print_state(t_data *core, int philo, int state);
 uint64_t	curr_time(t_data *core);
 //void		precise_sleep(uint64_t milliseconds);
-void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds);
+void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds, t_philo *philo);
 void *philosopher_routine(void *arg);
 void check_if_died(t_data *core, t_philo *philo);
+void check_if_died_with_time(t_data *core, t_philo *philo, uint64_t curr_time);
 
 
 #endif

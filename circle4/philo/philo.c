@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 11:44:15 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:30:18 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ void init_core(t_data *core, int argc, char **argv)
     core->time_to_sleep = ft_atoi(argv[4]) * 1000;
     if (argv[5] != NULL)
         core->has_to_eat_x = ft_atoi(argv[5]);
+    core->someone_died = 0;
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    core->start_time = get_time_us();
+    core->start_time = ((get_time_us()/ 1000) * 1000);
 }
 
 void print_state(t_data *core, int philo, int state)
@@ -65,17 +66,26 @@ void print_state(t_data *core, int philo, int state)
     uint64_t current_us = curr_time(core);
     int ms = current_us / 1000;
     char *msg;
-
-    if (state == TAKEN_FORK)
-        msg = "has taken a fork";
-    else if (state == EATING)
-        msg = "is eating";
-    else if (state == SLEEPING)
-        msg = "is sleeping";
-    else if (state == THINKING)
-        msg = "is thinking";
-    else if (state == DIED)
+    int sdied;
+    
+    pthread_mutex_lock(&core->died_mutex);
+    sdied = core->someone_died;
+    pthread_mutex_unlock(&core->died_mutex);
+    if (state == DIED)
         msg = "died";
+    else if (sdied == 0)
+    {
+        if (state == TAKEN_FORK)
+            msg = "has taken a fork";
+        else if (state == EATING)
+            msg = "is eating";
+        else if (state == SLEEPING)
+            msg = "is sleeping";
+        else if (state == THINKING)
+            msg = "is thinking";   
+        else
+            return;
+    }
     else
         return;
 
@@ -96,12 +106,14 @@ int	main(int argc, char **argv)
 	
 }
 
-void check_if_died(t_data *core, t_philo *philo)
-{
-    uint64_t last_eaten = philo->last_eaten;
-    
-    if (curr_time(core) - last_eaten >= core->time_to_die)
+void check_if_died(t_data *core, t_philo *philo) {
+    uint64_t curr_time_us = curr_time(core);
+    if (curr_time_us - philo->last_eaten >= core->time_to_die)
     {
+        pthread_mutex_lock(&core->died_mutex);
+        core->someone_died = 1;
+        pthread_mutex_unlock(&core->died_mutex);
+        
         philo->state = DIED;
         print_state(core, philo->id, philo->state);
         exit(0);

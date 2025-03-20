@@ -23,8 +23,16 @@ void p_take_fork(t_data *core, t_philo *philo)
 
 void p_release_fork(t_philo *philo)
 {
+//	if (philo->left_fork < philo->right_fork) 
+//	{
+    pthread_mutex_unlock(philo->left_fork);
+    pthread_mutex_unlock(philo->right_fork);  
+/*    }
+	else
+	{
     pthread_mutex_unlock(philo->right_fork);
     pthread_mutex_unlock(philo->left_fork);
+    }*/
 }
 
 void p_eat(t_data *core, t_philo *philo)
@@ -32,14 +40,14 @@ void p_eat(t_data *core, t_philo *philo)
     philo->last_eaten = curr_time(core);
     philo->state = EATING;
     print_state(core, philo->id, philo->state);
-    precise_sleep_with_curr_time(core, core->time_to_eat);
+    precise_sleep_with_curr_time(core, core->time_to_eat, philo);
 }
 
 void p_sleep(t_data *core, t_philo *philo)
 {
     philo->state = SLEEPING;
     print_state(core, philo->id, philo->state);
-    precise_sleep_with_curr_time(core, core->time_to_sleep);
+    precise_sleep_with_curr_time(core, core->time_to_sleep, philo);
 }
 
 void *philosopher_routine(void *arg)
@@ -53,23 +61,20 @@ void *philosopher_routine(void *arg)
     while (1)
     {
         check_if_died(core, philo);
-        if (philo->id % 2 != 0)
-        {
-            uint64_t desired_start = philo->last_eaten + philo->start_delay;
-            uint64_t now = curr_time(core);
-            if (now < desired_start)
-                precise_sleep_with_curr_time(core, desired_start - now);
-        }
+        if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
+            precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
-
+        check_if_died(core, philo);
         p_take_fork(core, philo);
         check_if_died(core, philo);
         p_eat(core, philo);
+        philo->ate_x++;
         check_if_died(core, philo);
         p_release_fork(philo);
         check_if_died(core, philo);
         p_sleep(core, philo);
+
     }
     return NULL;
 }
