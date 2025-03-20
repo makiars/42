@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 17:36:21 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:11:42 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void print_state(t_data *core, int philo, int state)
     int ms = current_us / 1000;
     char *msg;
     int sdied;
+    char *ms_str = ft_itoa(ms);
+    char *philo_str = ft_itoa(philo);
     
     pthread_mutex_lock(&core->died_mutex);
     sdied = core->someone_died;
@@ -90,8 +92,15 @@ void print_state(t_data *core, int philo, int state)
         return;
 
     pthread_mutex_lock(&core->print_mutex);
-    ft_printf("%d %d %s\n", ms, philo, msg);
+    write(1, ms_str, ft_strlen(ms_str));
+    write(1, " ", 1);
+    write(1, philo_str, ft_strlen(philo_str));
+    write(1, " ", 1);
+    write(1, msg, ft_strlen(msg));
+    write(1, "\n", 1);
     pthread_mutex_unlock(&core->print_mutex);
+    free(ms_str);
+    free(philo_str);
 
 }
 
