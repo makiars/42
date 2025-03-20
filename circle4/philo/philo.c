@@ -13,23 +13,6 @@
 #include "philo.h"
 
 
-void print_state(t_data *core, int philo, int state)
-{
-    int ms = curr_time(core);
-    char *msg;
-
-    if (state == TAKEN_FORK) msg = "has taken a fork";
-    else if (state == EATING) msg = "is eating";
-    else if (state == SLEEPING) msg = "is sleeping";
-    else if (state == THINKING) msg = "is thinking";
-    else if (state == DIED) msg = "died";
-    else return;
-
-    pthread_mutex_lock(&core->print_mutex);
-    printf("%d %d %s\n", ms, philo, msg);
-    pthread_mutex_unlock(&core->print_mutex);
-}
-
 t_data	*address_getter(t_data *core)
 {
 	static t_data	*new_core;
@@ -43,41 +26,65 @@ t_data	*address_getter(t_data *core)
 	}
 }
 
-
-void	init_core(t_data *core, int argc, char **argv)
+void init_core(t_data *core, int argc, char **argv)
 {
-	int	temp;
-	int	i;
+    int temp;
+    int i;
 
-	i = 1;
-	temp = 0;
-	if (argc < 5)
-	{
-		printf("not enough args\n");
-		exit(2);
-	}
-	while (i < argc)
-	{
-		temp = ft_atoi(argv[i]);
-		if (strcmp(ft_itoa(temp), argv[i]) != 0)
-		{
-			printf("use proper numbers, friend\n");
-			exit(2);
-		}
-		i++;
-	}
-	pthread_mutex_init(&core->print_mutex, NULL);
-	core->num_philo = ft_atoi(argv[1]);
-	core->time_to_die = ft_atoi(argv[2]);
-	core->time_to_eat = ft_atoi(argv[3]);
-	core->time_to_sleep = ft_atoi(argv[4]);
-	if (argv[5] != NULL)
-		core->has_to_eat_x = ft_atoi(argv[5]);
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	core->start_time = get_time_us();
-
+    i = 1;
+    temp = 0;
+    if (argc < 5)
+    {
+        printf("not enough args\n");
+        exit(2);
+    }
+    while (i < argc)
+    {
+        temp = ft_atoi(argv[i]);
+        if (strcmp(ft_itoa(temp), argv[i]) != 0)
+        {
+            printf("use proper numbers, friend\n");
+            exit(2);
+        }
+        i++;
+    }
+    pthread_mutex_init(&core->print_mutex, NULL);
+    core->num_philo = ft_atoi(argv[1]);
+    /* Convert time values from ms to us */
+    core->time_to_die = ft_atoi(argv[2]) * 1000;
+    core->time_to_eat = ft_atoi(argv[3]) * 1000;
+    core->time_to_sleep = ft_atoi(argv[4]) * 1000;
+    if (argv[5] != NULL)
+        core->has_to_eat_x = ft_atoi(argv[5]);
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    core->start_time = get_time_us();
 }
+
+void print_state(t_data *core, int philo, int state)
+{
+    uint64_t current_us = curr_time(core);
+    int ms = current_us / 1000;
+    char *msg;
+
+    if (state == TAKEN_FORK)
+        msg = "has taken a fork";
+    else if (state == EATING)
+        msg = "is eating";
+    else if (state == SLEEPING)
+        msg = "is sleeping";
+    else if (state == THINKING)
+        msg = "is thinking";
+    else if (state == DIED)
+        msg = "died";
+    else
+        return;
+
+    pthread_mutex_lock(&core->print_mutex);
+    printf("%d %d %s\n", ms, philo, msg);
+    pthread_mutex_unlock(&core->print_mutex);
+}
+
 
 int	main(int argc, char **argv)
 {
@@ -91,7 +98,11 @@ int	main(int argc, char **argv)
 
 void check_if_died(t_data *core, t_philo *philo)
 {
-    if ((uint64_t)core->time_to_die < curr_time(core) - philo->last_eaten)
+    pthread_mutex_lock(&philo->meal_mutex);
+    uint64_t last_eaten = philo->last_eaten;
+    pthread_mutex_unlock(&philo->meal_mutex);
+    
+    if ((uint64_t)core->time_to_die < curr_time(core) - last_eaten)
     {
         philo->state = DIED;
         print_state(core, philo->id, philo->state);

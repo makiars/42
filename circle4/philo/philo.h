@@ -45,15 +45,15 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	int			num_philo;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			has_to_eat_x;
-	uint64_t	start_time;
-	t_philo		*philo_head;
-	pthread_mutex_t *forks;
-	pthread_mutex_t print_mutex;
+	int					num_philo;
+	uint64_t			time_to_die;
+	uint64_t			time_to_eat;
+	uint64_t			time_to_sleep;
+	int					has_to_eat_x;
+	uint64_t			start_time;
+	t_philo				*philo_head;
+	pthread_mutex_t 	*forks;
+	pthread_mutex_t 	print_mutex;
 }	t_data;
 
 
