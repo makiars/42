@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 10:12:32 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:14:27 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ int	main(int argc, char **argv)
 
 void check_if_died(t_data *core, t_philo *philo)
 {
-    pthread_mutex_lock(&philo->meal_mutex);
     uint64_t last_eaten = philo->last_eaten;
-    pthread_mutex_unlock(&philo->meal_mutex);
     
     if ((uint64_t)core->time_to_die < curr_time(core) - last_eaten)
     {

@@ -29,9 +29,7 @@ void p_release_fork(t_philo *philo)
 
 void p_eat(t_data *core, t_philo *philo)
 {
-    pthread_mutex_lock(&philo->meal_mutex);
     philo->last_eaten = curr_time(core);
-    pthread_mutex_unlock(&philo->meal_mutex);
     philo->state = EATING;
     print_state(core, philo->id, philo->state);
     precise_sleep_with_curr_time(core, core->time_to_eat);
@@ -49,8 +47,8 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     t_data *core = address_getter(NULL);
 
-    while (core->start_flag == 0)
-        usleep(100);
+    pthread_mutex_lock(&core->start_mutex);
+    pthread_mutex_unlock(&core->start_mutex);
     while (1)
     {
         check_if_died(core, philo);

@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 10:13:02 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:25:33 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,19 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	int					num_philo;
-	uint64_t			time_to_die;
-	uint64_t			time_to_eat;
-	uint64_t			time_to_sleep;
-	int					has_to_eat_x;
-	uint64_t			start_time;
-	t_philo				*philo_head;
-	pthread_mutex_t 	*forks;
-	pthread_mutex_t 	print_mutex;
-}	t_data;
+    int                 num_philo;
+    uint64_t            time_to_die;
+    uint64_t            time_to_eat;
+    uint64_t            time_to_sleep;
+    int                 has_to_eat_x;
+    uint64_t            start_time;
+    t_philo             *philo_head;
+    pthread_mutex_t     *forks;
+    pthread_mutex_t     print_mutex;
+    pthread_mutex_t     start_mutex;
+}   t_data;
+
+
 
 
 

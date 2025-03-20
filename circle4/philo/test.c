@@ -14,6 +14,8 @@ void malloc_and_init_mutex(t_data *data)
 	i = -1;
 	while (++i < data->num_philo)
 		pthread_mutex_init(&data->forks[i], NULL);
+
+	pthread_mutex_init(&data->start_mutex, NULL);
 }
 
 void init_philo(t_data *data)
@@ -64,6 +66,7 @@ void create_threads(t_data *data)
 	int		i;
 	t_philo *current;
 
+	pthread_mutex_lock(&data->start_mutex);
 	current = data->philo_head;
 	i = -1;
 	while (++i < data->num_philo)
@@ -75,7 +78,7 @@ void create_threads(t_data *data)
 		}
 		current = current->next;
 	}
-	data->start_flag = 1;
+	pthread_mutex_unlock(&data->start_mutex);
 }
 
 void join_threads(t_data *data)
@@ -109,6 +112,7 @@ void free_threads(t_data *data)
         free(current);
         current = next;
     }
+	pthread_mutex_destroy(&data->start_mutex);
 }
 
 void initialize_threads(t_data *data)

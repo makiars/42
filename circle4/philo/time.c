@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/02/17 17:59:57 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:37:08 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,13 @@ void precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds)
 
     while ((elapsed = get_time_us() - start_us) < target_us)
     {
+        //add alive check
         rem = target_us - elapsed;
         if (rem > 1000)
             usleep(rem / 2);
         else
         {
-            while (get_time_us() - start_us < target_us)
-                ;
-            break;
+            usleep(10);
         }
     }
 }
