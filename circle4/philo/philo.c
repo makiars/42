@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 10:14:27 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:44:15 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void print_state(t_data *core, int philo, int state)
     pthread_mutex_lock(&core->print_mutex);
     printf("%d %d %s\n", ms, philo, msg);
     pthread_mutex_unlock(&core->print_mutex);
+
 }
 
 
@@ -99,7 +100,7 @@ void check_if_died(t_data *core, t_philo *philo)
 {
     uint64_t last_eaten = philo->last_eaten;
     
-    if ((uint64_t)core->time_to_die < curr_time(core) - last_eaten)
+    if (curr_time(core) - last_eaten >= core->time_to_die)
     {
         philo->state = DIED;
         print_state(core, philo->id, philo->state);

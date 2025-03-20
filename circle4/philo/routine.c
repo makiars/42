@@ -49,6 +49,7 @@ void *philosopher_routine(void *arg)
 
     pthread_mutex_lock(&core->start_mutex);
     pthread_mutex_unlock(&core->start_mutex);
+
     while (1)
     {
         check_if_died(core, philo);
@@ -61,13 +62,7 @@ void *philosopher_routine(void *arg)
         }
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
-        if (core->time_to_die < curr_time(core) - philo->last_eaten)
-        {
-            philo->state = DIED;
-            print_state(core, philo->id, philo->state);
-            exit(0);
-        }
-        check_if_died(core, philo);
+
         p_take_fork(core, philo);
         check_if_died(core, philo);
         p_eat(core, philo);
