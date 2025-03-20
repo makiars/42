@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 14:30:18 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:36:21 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void init_core(t_data *core, int argc, char **argv)
     temp = 0;
     if (argc < 5)
     {
-        printf("not enough args\n");
+        ft_printf("not enough args\n");
         exit(2);
     }
     while (i < argc)
@@ -43,7 +43,7 @@ void init_core(t_data *core, int argc, char **argv)
         temp = ft_atoi(argv[i]);
         if (strcmp(ft_itoa(temp), argv[i]) != 0)
         {
-            printf("use proper numbers, friend\n");
+            ft_printf("use proper numbers, friend\n");
             exit(2);
         }
         i++;
@@ -58,7 +58,7 @@ void init_core(t_data *core, int argc, char **argv)
     core->someone_died = 0;
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    core->start_time = ((get_time_us()/ 1000) * 1000);
+    
 }
 
 void print_state(t_data *core, int philo, int state)
@@ -90,7 +90,7 @@ void print_state(t_data *core, int philo, int state)
         return;
 
     pthread_mutex_lock(&core->print_mutex);
-    printf("%d %d %s\n", ms, philo, msg);
+    ft_printf("%d %d %s\n", ms, philo, msg);
     pthread_mutex_unlock(&core->print_mutex);
 
 }

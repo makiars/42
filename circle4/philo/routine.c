@@ -57,14 +57,14 @@ void *philosopher_routine(void *arg)
 
     pthread_mutex_lock(&core->start_mutex);
     pthread_mutex_unlock(&core->start_mutex);
-
+    philo->last_eaten = curr_time(core);
     while (1)
     {
         check_if_died(core, philo);
-        if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
-            precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
+        if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
+            precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
         check_if_died(core, philo);
         p_take_fork(core, philo);
         check_if_died(core, philo);

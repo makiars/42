@@ -35,7 +35,6 @@ void init_philo(t_data *data)
 		}
 		current->id = i + 1;
 		current->ate_x = 0;
-		current->last_eaten = data->start_time;
 		current->left_fork = &data->forks[i];
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->last_eaten = curr_time(address_getter(NULL));
@@ -68,11 +67,14 @@ void create_threads(t_data *data)
 	int		i;
 	t_philo *current;
 
+	
 	pthread_mutex_lock(&data->start_mutex);
+	
 	current = data->philo_head;
 	i = -1;
 	while (++i < data->num_philo)
 	{
+		current->last_eaten = data->start_time;
 		if (pthread_create(&current->thread, NULL, philosopher_routine, current) != 0)
 		{
 			fprintf(stderr, "Error: Failed to create thread for philosopher %d.\n", current->id);
@@ -80,6 +82,7 @@ void create_threads(t_data *data)
 		}
 		current = current->next;
 	}
+	data->start_time = ((get_time_us()/ 1000) * 1000);
 	pthread_mutex_unlock(&data->start_mutex);
 }
 

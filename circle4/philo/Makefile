@@ -1,6 +1,6 @@
 NAME = philo
 
-SRCS = philo.c ft_atoi.c ft_itoa.c test.c time.c routine.c
+SRCS = philo.c ft_atoi.c ft_itoa.c test.c time.c routine.c ./ft_printf/ft_printf.c ./ft_printf/ft_putnbr.c ./ft_printf/ft_putchar.c ./ft_printf/ft_putstr.c ./ft_printf/ft_putnbr_unsigned.c ./ft_printf/ft_puthex.c ./ft_printf/ft_putptr.c
 
 BOBJS = $(BSRCS:.c=.o)
 
