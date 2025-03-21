@@ -68,22 +68,26 @@ void create_threads(t_data *data)
 	t_philo *current;
 
 	
-	pthread_mutex_lock(&data->start_mutex);
-	
+	data->threads_created = 0;
+	data->start_time = (((get_time_us())/ 1000) * 1000);
 	current = data->philo_head;
 	i = -1;
 	while (++i < data->num_philo)
 	{
-		current->last_eaten = data->start_time;
 		if (pthread_create(&current->thread, NULL, philosopher_routine, current) != 0)
 		{
 			fprintf(stderr, "Error: Failed to create thread for philosopher %d.\n", current->id);
 			exit(EXIT_FAILURE);
 		}
+
 		current = current->next;
+		pthread_mutex_lock(&data->start_mutex);
+		data->threads_created++;
+		pthread_mutex_unlock(&data->start_mutex);
 	}
-	data->start_time = ((get_time_us()/ 1000) * 1000);
-	pthread_mutex_unlock(&data->start_mutex);
+	while (data->threads_created < data->num_philo)
+    	usleep(10);
+
 }
 
 void join_threads(t_data *data)

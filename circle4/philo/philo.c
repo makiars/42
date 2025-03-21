@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/20 18:11:42 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/21 12:59:32 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void init_core(t_data *core, int argc, char **argv)
     core->someone_died = 0;
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    
 }
 
 void print_state(t_data *core, int philo, int state)
@@ -122,7 +121,7 @@ void check_if_died(t_data *core, t_philo *philo) {
         pthread_mutex_lock(&core->died_mutex);
         core->someone_died = 1;
         pthread_mutex_unlock(&core->died_mutex);
-        
+        printf("Time to die %lu last eaten %lu curr time %lu\n ",core->time_to_die, philo->last_eaten, curr_time(core));
         philo->state = DIED;
         print_state(core, philo->id, philo->state);
         exit(0);

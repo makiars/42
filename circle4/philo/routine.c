@@ -55,9 +55,8 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     t_data *core = address_getter(NULL);
 
-    pthread_mutex_lock(&core->start_mutex);
-    pthread_mutex_unlock(&core->start_mutex);
 
+    
     if (philo->start_delay)
         precise_sleep_with_curr_time(core, get_time_us() + philo->start_delay, philo);
 
