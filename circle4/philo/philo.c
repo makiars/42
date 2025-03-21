@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 12:59:32 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:39:19 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ void init_core(t_data *core, int argc, char **argv)
 
 void print_state(t_data *core, int philo, int state)
 {
-    uint64_t current_us = curr_time(core);
-    int ms = current_us / 1000;
     char *msg;
     int sdied;
-    char *ms_str = ft_itoa(ms);
+    char *ms_str;
     char *philo_str = ft_itoa(philo);
     
     pthread_mutex_lock(&core->died_mutex);
@@ -74,7 +72,7 @@ void print_state(t_data *core, int philo, int state)
     pthread_mutex_unlock(&core->died_mutex);
     if (state == DIED)
         msg = "died";
-    else if (sdied == 0)
+    if (sdied == 0)
     {
         if (state == TAKEN_FORK)
             msg = "has taken a fork";
@@ -89,8 +87,8 @@ void print_state(t_data *core, int philo, int state)
     }
     else
         return;
-
     pthread_mutex_lock(&core->print_mutex);
+    ms_str=ft_itoa(curr_time(core)/1000);
     write(1, ms_str, ft_strlen(ms_str));
     write(1, " ", 1);
     write(1, philo_str, ft_strlen(philo_str));

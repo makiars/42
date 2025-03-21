@@ -55,17 +55,20 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     t_data *core = address_getter(NULL);
 
+    pthread_mutex_lock(&core->start_mutex);
+    pthread_mutex_unlock(&core->start_mutex);
 
-    
-    if (philo->start_delay)
-        precise_sleep_with_curr_time(core, get_time_us() + philo->start_delay, philo);
+    if (philo->id %2 == 1)
+        precise_sleep_with_curr_time(core, 10000, philo);
 
-    philo->last_eaten = curr_time(core);
+    philo->last_eaten = 0;
     while (1)
     {
         check_if_died(core, philo);
+
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
+
         if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
             precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
         check_if_died(core, philo);

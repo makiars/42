@@ -39,12 +39,7 @@ void init_philo(t_data *data)
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->last_eaten = curr_time(address_getter(NULL));
 		pthread_mutex_init(&current->should_eat_mutex, NULL);
-		if (current->id == data->num_philo && data->num_philo % 2 != 0)
-			current->start_delay = data->time_to_eat *2;
-		else if ((current->id % 2) != 0)
-            current->start_delay = data->time_to_eat;
-        else
-            current->start_delay = 0;
+
 		if (i == 0)
 		{
 			data->philo_head = current;
@@ -71,6 +66,7 @@ void create_threads(t_data *data)
 	data->threads_created = 0;
 	data->start_time = (((get_time_us())/ 1000) * 1000);
 	current = data->philo_head;
+	pthread_mutex_lock(&data->start_mutex);
 	i = -1;
 	while (++i < data->num_philo)
 	{
@@ -81,12 +77,12 @@ void create_threads(t_data *data)
 		}
 
 		current = current->next;
-		pthread_mutex_lock(&data->start_mutex);
-		data->threads_created++;
-		pthread_mutex_unlock(&data->start_mutex);
+		
+
+		
 	}
-	while (data->threads_created < data->num_philo)
-    	usleep(10);
+	pthread_mutex_unlock(&data->start_mutex);
+
 
 }
 

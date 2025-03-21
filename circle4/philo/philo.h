@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 12:29:47 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:38:57 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_philo
 	uint64_t			last_eaten;
 	int					state;
 	pthread_mutex_t		should_eat_mutex;
-	uint64_t			start_delay;
 	struct s_philo		*next;
 	struct s_philo		*prev;
 }	t_philo;
@@ -72,11 +71,9 @@ t_data		*address_getter(t_data *core);
 uint64_t	get_time_us(void);
 void		print_state(t_data *core, int philo, int state);
 uint64_t	curr_time(t_data *core);
-//void		precise_sleep(uint64_t milliseconds);
 void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds, t_philo *philo);
-void *philosopher_routine(void *arg);
-void check_if_died(t_data *core, t_philo *philo);
-void check_if_died_with_time(t_data *core, t_philo *philo, uint64_t curr_time);
+void		*philosopher_routine(void *arg);
+void		check_if_died(t_data *core, t_philo *philo);
 
 
 #endif
