@@ -57,6 +57,10 @@ void *philosopher_routine(void *arg)
 
     pthread_mutex_lock(&core->start_mutex);
     pthread_mutex_unlock(&core->start_mutex);
+
+    if (philo->start_delay)
+        precise_sleep_with_curr_time(core, get_time_us() + philo->start_delay, philo);
+
     philo->last_eaten = curr_time(core);
     while (1)
     {
