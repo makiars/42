@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 14:39:19 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:45:03 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void check_if_died(t_data *core, t_philo *philo) {
         pthread_mutex_lock(&core->died_mutex);
         core->someone_died = 1;
         pthread_mutex_unlock(&core->died_mutex);
-        printf("Time to die %lu last eaten %lu curr time %lu\n ",core->time_to_die, philo->last_eaten, curr_time(core));
+//        printf("Time to die %lu last eaten %lu curr time %lu\n ",core->time_to_die, philo->last_eaten, curr_time(core));
         philo->state = DIED;
         print_state(core, philo->id, philo->state);
         exit(0);

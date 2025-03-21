@@ -37,7 +37,7 @@ void init_philo(t_data *data)
 		current->ate_x = 0;
 		current->left_fork = &data->forks[i];
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
-		current->last_eaten = curr_time(address_getter(NULL));
+		current->last_eaten = 0;
 		pthread_mutex_init(&current->should_eat_mutex, NULL);
 
 		if (i == 0)
