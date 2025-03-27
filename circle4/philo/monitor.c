@@ -6,40 +6,46 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 15:40:48 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:29:22 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*meal_monitor(void *arg)
+int	check_all_philosophers_ate(t_data *data)
 {
-	t_data	*core;
+	int		i;
 	int		all_ate;
 	t_philo	*p;
-	int		i;
 
 	i = 0;
-	core = (t_data *)arg;
+	all_ate = 1;
+	p = data->philo_head;
+	while (i < data->num_philo)
+	{
+		if (p->ate_x < data->has_to_eat_x)
+		{
+			all_ate = 0;
+			break ;
+		}
+		i++;
+		p = p->next;
+	}
+	return (all_ate);
+}
+
+void	*meal_monitor(void *arg)
+{
+	t_data	*data;
+
+	data = (t_data *)arg;
 	while (1)
 	{
-		all_ate = 1;
-		p = core->philo_head;
-		while (i < core->num_philo)
+		if (check_all_philosophers_ate(data))
 		{
-			if (p->ate_x < core->has_to_eat_x)
-			{
-				all_ate = 0;
-				break ;
-			}
-			i++;
-			p = p->next;
-		}
-		if (all_ate)
-		{
-			pthread_mutex_lock(&core->died_mutex);
-			core->someone_died = 1;
-			pthread_mutex_unlock(&core->died_mutex);
+			pthread_mutex_lock(&data->died_mutex);
+			data->someone_died = 1;
+			pthread_mutex_unlock(&data->died_mutex);
 			break ;
 		}
 		usleep(1000);
@@ -47,49 +53,60 @@ void	*meal_monitor(void *arg)
 	return (NULL);
 }
 
-void	*death_monitor(void *arg)
+int	check_someone_died(t_data *data)
 {
-	t_data		*core;
-	t_philo		*curr;
+	pthread_mutex_lock(&data->died_mutex);
+	if (data->someone_died)
+	{
+		pthread_mutex_unlock(&data->died_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->died_mutex);
+	return (0);
+}
+
+int	check_philosopher_death(t_data *data, t_philo *curr)
+{
 	uint64_t	now;
 
-	core = (t_data *)arg;
+	while (curr)
+	{
+		now = curr_time(data);
+		pthread_mutex_lock(&curr->meal_mutex);
+		if (now - curr->last_eaten >= data->time_to_die)
+		{
+			pthread_mutex_unlock(&curr->meal_mutex);
+			pthread_mutex_lock(&data->died_mutex);
+			if (!data->someone_died)
+			{
+				data->someone_died = 1;
+				pthread_mutex_lock(&data->print_mutex);
+				printf("%lu %d died\n", now / 1000, curr->id);
+				pthread_mutex_unlock(&data->print_mutex);
+			}
+			pthread_mutex_unlock(&data->died_mutex);
+			return (1);
+		}
+		pthread_mutex_unlock(&curr->meal_mutex);
+		curr = curr->next;
+	}
+	return (0);
+}
+
+void	*death_monitor(void *arg)
+{
+	t_data	*data;
+	t_philo	*curr;
+
+	data = (t_data *)arg;
+	curr = data->philo_head;
 	while (1)
 	{
-		pthread_mutex_lock(&core->died_mutex);
-		if (core->someone_died)
-		{
-			pthread_mutex_unlock(&core->died_mutex);
+		if (check_someone_died(data))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&core->died_mutex);
-		curr = core->philo_head;
-		while (curr)
-		{
-			now = curr_time(core);
-			pthread_mutex_lock(&curr->meal_mutex);
-			if (now - curr->last_eaten >= core->time_to_die)
-			{
-				pthread_mutex_unlock(&curr->meal_mutex);
-				pthread_mutex_lock(&core->died_mutex);
-				if (!core->someone_died)
-				{
-					core->someone_died = 1;
-					pthread_mutex_lock(&core->print_mutex);
-					printf("%lu %d died\n", now / 1000, curr->id);
-					pthread_mutex_unlock(&core->print_mutex);
-				}
-				pthread_mutex_unlock(&core->died_mutex);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&curr->meal_mutex);
-			curr = curr->next;
-		}
+		if (check_philosopher_death(data, curr))
+			return (NULL);
 		usleep(500);
 	}
 	return (NULL);
 }
-
-
-
-

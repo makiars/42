@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marsenij <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:25:11 by marsenij          #+#    #+#             */
-/*   Updated: 2024/04/22 13:27:51 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:26:54 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ void	free_double_array(char **array)
 	}
 	free(array);
 }
-

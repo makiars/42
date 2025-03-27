@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 15:42:32 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:00:38 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,21 @@ typedef struct s_data
 char		*ft_itoa(int n);
 int			ft_atoi(const char *nptr);
 void		initialize_threads(t_data *data);
-t_data		*address_getter(t_data *core);
+t_data		*address_getter(t_data *data);
 uint64_t	get_time_us(void);
-void		print_state(t_data *core, int philo, int state);
-uint64_t	curr_time(t_data *core);
-void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds);
+void		print_state(t_data *data, int philo, int state);
+uint64_t	curr_time(t_data *data);
+void		precise_sleep(t_data *data, uint64_t milliseconds);
 void		*philosopher_routine(void *arg);
-int			check_if_died(t_data *core);
+int			check_if_died(t_data *data);
 void		p_release_fork(t_philo *philo);
 void		*death_monitor(void *arg);
 void		*meal_monitor(void *arg);
+pthread_t	create_death_thread(t_data *data);
+pthread_t	create_meal_thread(t_data *data);
+int			init_philo(t_data *data, t_philo *current, t_philo *last);
+void		p_take_fork(t_data *data, t_philo *philo);
+void		p_eat(t_data *data, t_philo *philo);
+void		p_sleep(t_data *data, t_philo *philo);
+
 #endif
