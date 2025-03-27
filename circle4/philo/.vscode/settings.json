@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"random": "c",
-		"ft_printf.c": "cpp"
+		"ft_printf.c": "cpp",
+		"philo.h": "c"
 	}
 }

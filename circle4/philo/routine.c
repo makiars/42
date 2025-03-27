@@ -62,38 +62,36 @@ void *philosopher_routine(void *arg)
     {
         print_state(core, philo->id, TAKEN_FORK);
         precise_sleep_with_curr_time(core, core->time_to_die, philo);
-        print_state(core, philo->id, DIED);
         return NULL;
     }
-    
-    if (philo->id %2 == 1)
-        precise_sleep_with_curr_time(core, 10000, philo);
 
-    philo->last_eaten = 0;
+    if (philo->id % 2 == 1)
+        precise_sleep_with_curr_time(core, 10000, philo);
+    pthread_mutex_lock(&philo->meal_mutex);
+    philo->last_eaten = curr_time(core);
+    pthread_mutex_unlock(&philo->meal_mutex);
     while (1)
     {
-        if (check_if_died(core, philo))
-        return NULL;
+        pthread_mutex_lock(&core->died_mutex);
+        if (core->someone_died)
+        {
+            pthread_mutex_unlock(&core->died_mutex);
+            return NULL;
+        }
+        pthread_mutex_unlock(&core->died_mutex);
 
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
-
-        if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
+        if (philo->ate_x != 0 && core->num_philo % 2 != 0 && 
+            core->time_to_sleep < core->time_to_eat * 2)
             precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
-        if (check_if_died(core, philo))
-            return NULL;
+
         p_take_fork(core, philo);
-        if (check_if_died(core, philo))
-            return NULL;
         p_eat(core, philo);
         philo->ate_x++;
-        if (check_if_died(core, philo))
-            return NULL;
         p_release_fork(philo);
-        if (check_if_died(core, philo))
-            return NULL;
         p_sleep(core, philo);
-
     }
     return NULL;
 }
+

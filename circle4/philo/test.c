@@ -39,7 +39,7 @@ void init_philo(t_data *data)
 		current->right_fork = &data->forks[(i + 1) % data->num_philo];
 		current->last_eaten = 0;
 		pthread_mutex_init(&current->should_eat_mutex, NULL);
-
+		pthread_mutex_init(&current->meal_mutex, NULL);
 		if (i == 0)
 		{
 			data->philo_head = current;
@@ -122,9 +122,41 @@ void free_threads(t_data *data)
 
 void initialize_threads(t_data *data)
 {
-	malloc_and_init_mutex(data);
-	init_philo(data);
-	create_threads(data);
-	join_threads(data);
-	free_threads(data);
+    pthread_t meal_monitor_thread;
+    pthread_t death_monitor_thread;
+
+    malloc_and_init_mutex(data);
+    init_philo(data);
+    create_threads(data);
+
+    // Create the death monitor thread unconditionally.
+	if (data->num_philo > 1)
+	{
+    	if (pthread_create(&death_monitor_thread, NULL, death_monitor, data) != 0)
+    	{
+        	fprintf(stderr, "Error: Failed to create death monitor thread.\n");
+        	exit(EXIT_FAILURE);
+    	}
+	}
+
+    // Create the meal monitor thread only if the "has_to_eat_x" condition applies.
+    if (data->has_to_eat_x > 0)
+    {
+        if (pthread_create(&meal_monitor_thread, NULL, meal_monitor, data) != 0)
+        {
+            fprintf(stderr, "Error: Failed to create meal monitor thread.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    join_threads(data);
+
+    // Join monitor threads.
+	if (data->num_philo > 1)
+    	pthread_join(death_monitor_thread, NULL);
+    if (data->has_to_eat_x > 0)
+        pthread_join(meal_monitor_thread, NULL);
+
+    free_threads(data);
 }
+

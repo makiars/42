@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 12:48:19 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:26:14 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,12 @@ void init_core(t_data *core, int argc, char **argv)
     }
     pthread_mutex_init(&core->died_mutex, NULL);
     pthread_mutex_init(&core->print_mutex, NULL);
+    
     core->num_philo = ft_atoi(argv[1]);
     core->time_to_die = ft_atoi(argv[2]) * 1000;
     core->time_to_eat = ft_atoi(argv[3]) * 1000;
     core->time_to_sleep = ft_atoi(argv[4]) * 1000;
+    core->has_to_eat_x = 0;
     if (argv[5] != NULL)
         core->has_to_eat_x = ft_atoi(argv[5]);
     core->someone_died = 0;
@@ -67,45 +69,37 @@ void init_core(t_data *core, int argc, char **argv)
 
 void print_state(t_data *core, int philo, int state)
 {
-    char *msg;
-    int sdied;
-    char *ms_str;
-    char *philo_str;
-    
+    // Always lock died_mutex first to ensure consistent lock order
     pthread_mutex_lock(&core->died_mutex);
-    sdied = core->someone_died;
-    pthread_mutex_unlock(&core->died_mutex);
-    if (state == DIED)
-        msg = "died";
-    if (sdied == 0)
-    {
-        if (state == TAKEN_FORK)
-            msg = "has taken a fork";
-        else if (state == EATING)
-            msg = "is eating";
-        else if (state == SLEEPING)
-            msg = "is sleeping";
-        else if (state == THINKING)
-            msg = "is thinking";   
-        else
-            return;
-    }
-    else
-        return;
-    pthread_mutex_lock(&core->print_mutex);
-    philo_str = ft_itoa(philo);
-    ms_str=ft_itoa(curr_time(core)/1000);
-    write(1, ms_str, ft_strlen(ms_str));
-    write(1, " ", 1);
-    write(1, philo_str, ft_strlen(philo_str));
-    write(1, " ", 1);
-    write(1, msg, ft_strlen(msg));
-    write(1, "\n", 1);
-    pthread_mutex_unlock(&core->print_mutex);
-    free(ms_str);
-    free(philo_str);
 
+    // Check if someone has died before printing
+    if (core->someone_died && state != DIED)
+    {
+        pthread_mutex_unlock(&core->died_mutex);  // Unlock died_mutex
+        return;  // Don't print if someone has died
+    }
+
+    // Lock the print mutex after died_mutex to avoid deadlock
+    pthread_mutex_lock(&core->print_mutex);
+
+    // Print state based on the philosopher's action
+    if (state == TAKEN_FORK)
+        printf("%lu %d has taken a fork\n", curr_time(core)/1000, philo);
+    else if (state == EATING)
+        printf("%lu %d is eating\n", curr_time(core)/1000, philo);
+    else if (state == SLEEPING)
+        printf("%lu %d is sleeping\n", curr_time(core)/1000, philo);
+    else if (state == THINKING)
+        printf("%lu %d is thinking\n", curr_time(core)/1000, philo);
+
+    // Unlock print_mutex after printing the state
+    pthread_mutex_unlock(&core->print_mutex);
+
+    // Finally, unlock died_mutex after everything is done
+    pthread_mutex_unlock(&core->died_mutex);
 }
+
+
 
 
 int	main(int argc, char **argv)
@@ -119,16 +113,9 @@ int	main(int argc, char **argv)
 }
 
 int check_if_died(t_data *core, t_philo *philo) {
-    uint64_t curr_time_us = curr_time(core);
-    if (curr_time_us - philo->last_eaten >= core->time_to_die)
-    {
-        pthread_mutex_lock(&core->died_mutex);
-        core->someone_died = 1;
-        pthread_mutex_unlock(&core->died_mutex);
-//        printf("Time to die %lu last eaten %lu curr time %lu\n ",core->time_to_die, philo->last_eaten, curr_time(core));
-        philo->state = DIED;
-        print_state(core, philo->id, philo->state);
-        return(1);
-    }
-    return (0);
+    (void) philo;
+    pthread_mutex_lock(&core->died_mutex);
+    int terminated = core->someone_died;
+    pthread_mutex_unlock(&core->died_mutex);
+    return terminated;
 }
