@@ -1,6 +1,6 @@
 NAME = philo
 
-SRCS = philo.c ft_atoi.c ft_itoa.c test.c time.c routine.c monitor.c ./ft_printf/ft_printf.c ./ft_printf/ft_putnbr.c ./ft_printf/ft_putchar.c ./ft_printf/ft_putstr.c ./ft_printf/ft_putnbr_unsigned.c ./ft_printf/ft_puthex.c ./ft_printf/ft_putptr.c
+SRCS = philo.c ft_atoi.c ft_itoa.c thread.c time.c routine.c monitor.c ./ft_printf/ft_printf.c ./ft_printf/ft_putnbr.c ./ft_printf/ft_putchar.c ./ft_printf/ft_putstr.c ./ft_printf/ft_putnbr_unsigned.c ./ft_printf/ft_puthex.c ./ft_printf/ft_putptr.c
 
 BOBJS = $(BSRCS:.c=.o)
 
@@ -13,18 +13,18 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=thread -fno-omit-frame-pointer  -p
 RM = rm -f
 
 $(NAME): $(OBJS)
-    $(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c
-    $(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
 
 clean:
-    $(RM) $(OBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
-    $(RM) $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
