@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 14:41:34 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:33:18 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void precise_sleep_with_curr_time(t_data *core, uint64_t target_us, t_philo *phi
     (void) philo;
     while (curr_time(core) - start_us < target_us)
     {
+        if (check_if_died(core, philo))
+            return;
         usleep(100);
-        check_if_died(core, philo);
     }
 }

@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 14:45:03 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:48:19 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void init_core(t_data *core, int argc, char **argv)
 {
     int temp;
     int i;
+    char *str;
 
     i = 1;
     temp = 0;
@@ -41,13 +42,17 @@ void init_core(t_data *core, int argc, char **argv)
     while (i < argc)
     {
         temp = ft_atoi(argv[i]);
-        if (strcmp(ft_itoa(temp), argv[i]) != 0)
+        str = ft_itoa(temp);
+        if (strcmp(str, argv[i]) != 0)
         {
             ft_printf("use proper numbers, friend\n");
+            free (str);
             exit(2);
         }
+        free (str);
         i++;
     }
+    pthread_mutex_init(&core->died_mutex, NULL);
     pthread_mutex_init(&core->print_mutex, NULL);
     core->num_philo = ft_atoi(argv[1]);
     core->time_to_die = ft_atoi(argv[2]) * 1000;
@@ -65,7 +70,7 @@ void print_state(t_data *core, int philo, int state)
     char *msg;
     int sdied;
     char *ms_str;
-    char *philo_str = ft_itoa(philo);
+    char *philo_str;
     
     pthread_mutex_lock(&core->died_mutex);
     sdied = core->someone_died;
@@ -88,6 +93,7 @@ void print_state(t_data *core, int philo, int state)
     else
         return;
     pthread_mutex_lock(&core->print_mutex);
+    philo_str = ft_itoa(philo);
     ms_str=ft_itoa(curr_time(core)/1000);
     write(1, ms_str, ft_strlen(ms_str));
     write(1, " ", 1);
@@ -112,7 +118,7 @@ int	main(int argc, char **argv)
 	
 }
 
-void check_if_died(t_data *core, t_philo *philo) {
+int check_if_died(t_data *core, t_philo *philo) {
     uint64_t curr_time_us = curr_time(core);
     if (curr_time_us - philo->last_eaten >= core->time_to_die)
     {
@@ -122,6 +128,7 @@ void check_if_died(t_data *core, t_philo *philo) {
 //        printf("Time to die %lu last eaten %lu curr time %lu\n ",core->time_to_die, philo->last_eaten, curr_time(core));
         philo->state = DIED;
         print_state(core, philo->id, philo->state);
-        exit(0);
+        return(1);
     }
+    return (0);
 }

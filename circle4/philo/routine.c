@@ -58,27 +58,40 @@ void *philosopher_routine(void *arg)
     pthread_mutex_lock(&core->start_mutex);
     pthread_mutex_unlock(&core->start_mutex);
 
+    if (core->num_philo == 1)
+    {
+        print_state(core, philo->id, TAKEN_FORK);
+        precise_sleep_with_curr_time(core, core->time_to_die, philo);
+        print_state(core, philo->id, DIED);
+        return NULL;
+    }
+    
     if (philo->id %2 == 1)
         precise_sleep_with_curr_time(core, 10000, philo);
 
     philo->last_eaten = 0;
     while (1)
     {
-        check_if_died(core, philo);
+        if (check_if_died(core, philo))
+        return NULL;
 
         philo->state = THINKING;
         print_state(core, philo->id, philo->state);
 
         if (philo->ate_x != 0 && core->num_philo %2 !=0 && core->time_to_sleep < core->time_to_eat *2)
             precise_sleep_with_curr_time(core, core->time_to_eat * 2 - core->time_to_sleep, philo);
-        check_if_died(core, philo);
+        if (check_if_died(core, philo))
+            return NULL;
         p_take_fork(core, philo);
-        check_if_died(core, philo);
+        if (check_if_died(core, philo))
+            return NULL;
         p_eat(core, philo);
         philo->ate_x++;
-        check_if_died(core, philo);
+        if (check_if_died(core, philo))
+            return NULL;
         p_release_fork(philo);
-        check_if_died(core, philo);
+        if (check_if_died(core, philo))
+            return NULL;
         p_sleep(core, philo);
 
     }

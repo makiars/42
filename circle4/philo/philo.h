@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/21 14:38:57 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:30:52 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		print_state(t_data *core, int philo, int state);
 uint64_t	curr_time(t_data *core);
 void		precise_sleep_with_curr_time(t_data *core, uint64_t milliseconds, t_philo *philo);
 void		*philosopher_routine(void *arg);
-void		check_if_died(t_data *core, t_philo *philo);
+int			check_if_died(t_data *core, t_philo *philo);
 
 
 #endif
