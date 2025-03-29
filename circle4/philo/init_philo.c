@@ -24,8 +24,10 @@ t_philo	*create_philosopher(t_data *data, int index)
 	current->left_fork = &data->forks[index];
 	current->right_fork = &data->forks[(index + 1) % data->num_philo];
 	current->last_eaten = 0;
-	pthread_mutex_init(&current->should_eat_mutex, NULL);
-	pthread_mutex_init(&current->meal_mutex, NULL);
+	if(pthread_mutex_init(&current->should_eat_mutex, NULL) != 0)
+		return (NULL);
+	if(pthread_mutex_init(&current->meal_mutex, NULL) != 0)
+		return (NULL);
 	return (current);
 }
 

@@ -65,7 +65,7 @@ int	is_valid_number(char *arg)
 	return (1);
 }
 
-int	input_handle(int argc, char **argv, int temp)
+int	input_handle(int argc, char **argv)
 {
 	int	i;
 
@@ -81,7 +81,6 @@ int	input_handle(int argc, char **argv, int temp)
 			printf("use proper numbers, friend\n");
 			return (1);
 		}
-		temp = ft_atoi(argv[i]);
 		i++;
 	}
 	return (0);
@@ -90,13 +89,13 @@ int	input_handle(int argc, char **argv, int temp)
 int	init_core(t_data *data, int argc, char **argv)
 {
 	struct timeval	tv;
-	int				temp;
 
-	temp = 0;
-	if (input_handle(argc, argv, temp))
+	if (input_handle(argc, argv))
 		return (1);
-	pthread_mutex_init(&data->died_mutex, NULL);
-	pthread_mutex_init(&data->print_mutex, NULL);
+	if(pthread_mutex_init(&data->died_mutex, NULL) != 0)
+		return (1); 
+	if(pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (1);
 	data->num_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]) * 1000;
 	data->time_to_eat = ft_atoi(argv[3]) * 1000;

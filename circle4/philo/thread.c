@@ -21,8 +21,10 @@ int	malloc_and_init_mutex(t_data *data)
 		return (0);
 	i = -1;
 	while (++i < data->num_philo)
-		pthread_mutex_init(&data->forks[i], NULL);
-	pthread_mutex_init(&data->start_mutex, NULL);
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+			return (0);
+	if (pthread_mutex_init(&data->start_mutex, NULL) != 0)
+		return (0);
 	return (1);
 }
 
