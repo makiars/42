@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:25:11 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:29:19 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:04:09 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,3 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
-

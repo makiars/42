@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 12:53:54 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:06:18 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int	one_philo(t_data *data, t_philo *philo)
 {
 	if (data->num_philo == 1)
 	{
-		printf("%lu 1 is thinking\n", curr_time(data)/1000);
+		printf("%lu 1 is thinking\n", curr_time(data) / 1000);
 		pthread_mutex_lock(philo->left_fork);
-		printf("%lu 1 has taken a fork\n", curr_time(data)/1000);
+		printf("%lu 1 has taken a fork\n", curr_time(data) / 1000);
 		precise_sleep(data, data->time_to_die);
 		pthread_mutex_unlock(philo->left_fork);
-		printf("%lu 1 died\n", curr_time(data)/1000);
+		printf("%lu 1 died\n", curr_time(data) / 1000);
 		pthread_mutex_lock(&data->died_mutex);
 		data->someone_died = 1;
 		pthread_mutex_unlock(&data->died_mutex);
@@ -56,7 +56,6 @@ void	handle_philosopher_cycle(t_data *data, t_philo *philo)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	p_release_fork(philo);
 	p_sleep(data, philo);
-
 }
 
 void	*philosopher_routine(void *arg)
@@ -65,13 +64,11 @@ void	*philosopher_routine(void *arg)
 	t_data	*data;
 
 	data = address_getter(NULL);
-
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(&data->start_mutex);
 	pthread_mutex_unlock(&data->start_mutex);
 	if (!one_philo(data, philo))
 		return (NULL);
-
 	if (philo->id % 2 == 1)
 		precise_sleep(data, 10000);
 	pthread_mutex_lock(&philo->meal_mutex);

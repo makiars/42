@@ -1,44 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread2.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 19:07:25 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:14:39 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-pthread_t	create_death_thread(t_data *data)
+int	main(int argc, char **argv)
 {
-	pthread_t	death_monitor_thread;
+	t_data	data;
 
-	if (data->num_philo > 1)
-	{
-		if (pthread_create(&death_monitor_thread, NULL,
-				death_monitor, data) != 0)
-		{
-			return (0);
-		}
-		return (death_monitor_thread);
-	}
-	return (1);
-}
-
-pthread_t	create_meal_thread(t_data *data)
-{
-	pthread_t	meal_monitor_thread;
-
-	if (data->has_to_eat_x > 0)
-	{
-		if (pthread_create(&meal_monitor_thread, NULL, meal_monitor, data) != 0)
-		{
-			return (0);
-		}
-		return (meal_monitor_thread);
-	}
-	return (1);
+	if (init_core(&data, argc, argv))
+		return (1);
+	address_getter(&data);
+	initialize_threads(&data);
 }

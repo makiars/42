@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 12:40:01 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:04:22 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	create_threads(t_data *data)
 {
 	int			i;
 	t_philo		*current;
-
 
 	data->threads_created = 0;
 	data->start_time = (((get_time_us()) / 1000) * 1000);
@@ -83,11 +82,14 @@ void	free_threads(t_data *data)
 	while (++i < data->num_philo)
 	{
 		pthread_mutex_destroy(&current->should_eat_mutex);
+		pthread_mutex_destroy(&current->meal_mutex);
 		next = current->next;
 		free(current);
 		current = next;
 	}
 	pthread_mutex_destroy(&data->start_mutex);
+	pthread_mutex_destroy(&data->died_mutex);
+	pthread_mutex_destroy(&data->print_mutex);
 }
 
 void	initialize_threads(t_data *data)

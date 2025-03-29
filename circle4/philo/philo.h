@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 12:39:33 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:15:46 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,7 @@ void		p_take_fork(t_data *data, t_philo *philo);
 void		p_eat(t_data *data, t_philo *philo);
 void		p_sleep(t_data *data, t_philo *philo);
 int			ft_strcmp(const char *s1, const char *s2);
+int			check_someone_died(t_data *data);
+int			init_core(t_data *data, int argc, char **argv);
 
 #endif

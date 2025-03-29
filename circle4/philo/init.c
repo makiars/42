@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 11:49:36 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:15:36 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	validate_arg_positive(int argc, char **argv)
 {
-	(void) argc;
-
 	if (ft_atoi(argv[1]) < 1)
 	{
 		printf("Less than 1 philo not possible\n");
@@ -58,7 +56,6 @@ int	is_valid_number(char *arg)
 	converted_str = ft_itoa(temp);
 	if (!converted_str)
 		return (0);
-
 	if (ft_strcmp(converted_str, arg) != 0)
 	{
 		free(converted_str);
@@ -77,8 +74,6 @@ int	input_handle(int argc, char **argv, int temp)
 		return (1);
 	if (!validate_arg_positive(argc, argv))
 		return (1);
-
-
 	while (i < argc)
 	{
 		if (!is_valid_number(argv[i]))
@@ -112,14 +107,4 @@ int	init_core(t_data *data, int argc, char **argv)
 	data->someone_died = 0;
 	gettimeofday(&tv, NULL);
 	return (0);
-}
-
-int	main(int argc, char **argv)
-{
-	t_data	data;
-
-	if (init_core(&data, argc, argv))
-		return (1);
-	address_getter(&data);
-	initialize_threads(&data);
 }
