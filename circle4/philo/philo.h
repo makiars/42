@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:47:36 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:39:33 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_data
 	pthread_mutex_t	start_mutex;
 	int				someone_died;
 	int				threads_created;
+	pthread_t		death_monitor_thread;
+	pthread_t		meal_monitor_thread;
 }	t_data;
 
 char		*ft_itoa(int n);

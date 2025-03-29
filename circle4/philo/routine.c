@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 11:53:30 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:53:54 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ void	handle_philosopher_cycle(t_data *data, t_philo *philo)
 		precise_sleep(data, data->time_to_eat * 2 - data->time_to_sleep);
 	p_take_fork(data, philo);
 	p_eat(data, philo);
-//	pthread_mutex_lock(&philo->meal_mutex);
+	pthread_mutex_lock(&philo->meal_mutex);
 	philo->ate_x++;
-//	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(&philo->meal_mutex);
 	p_release_fork(philo);
 	p_sleep(data, philo);
+
 }
 
 void	*philosopher_routine(void *arg)
@@ -63,12 +64,14 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 	t_data	*data;
 
-	philo = (t_philo *)arg;
 	data = address_getter(NULL);
+
+	philo = (t_philo *)arg;
 	pthread_mutex_lock(&data->start_mutex);
 	pthread_mutex_unlock(&data->start_mutex);
 	if (!one_philo(data, philo))
 		return (NULL);
+
 	if (philo->id % 2 == 1)
 		precise_sleep(data, 10000);
 	pthread_mutex_lock(&philo->meal_mutex);

@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:53:31 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:35:01 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,17 @@ int	check_all_philosophers_ate(t_data *data)
 	p = data->philo_head;
 	while (i < data->num_philo)
 	{
+		pthread_mutex_lock(&data->died_mutex);
 		if (p->ate_x < data->has_to_eat_x)
 		{
 			all_ate = 0;
+			pthread_mutex_unlock(&data->died_mutex);
 			break ;
 		}
+		pthread_mutex_unlock(&data->died_mutex);
 		i++;
 		p = p->next;
+		usleep(1000);
 	}
 	return (all_ate);
 }
@@ -51,6 +55,10 @@ void	*meal_monitor(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
+
+	pthread_mutex_lock(&data->start_mutex);
+	pthread_mutex_unlock(&data->start_mutex);
+
 	while (1)
 	{
 		if (check_all_philosophers_ate(data))
@@ -102,6 +110,9 @@ void	*death_monitor(void *arg)
 
 	data = (t_data *)arg;
 	curr = data->philo_head;
+
+	pthread_mutex_lock(&data->start_mutex);
+	pthread_mutex_unlock(&data->start_mutex);
 	while (1)
 	{
 		if (check_someone_died(data))

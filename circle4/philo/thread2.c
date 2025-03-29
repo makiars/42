@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 17:15:52 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:41:37 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ pthread_t	create_death_thread(t_data *data)
 		}
 		return (death_monitor_thread);
 	}
+
 	return (1);
 }
 

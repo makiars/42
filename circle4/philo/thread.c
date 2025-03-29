@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 17:16:01 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:40:01 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ int	malloc_and_init_mutex(t_data *data)
 
 int	create_threads(t_data *data)
 {
-	int		i;
-	t_philo	*current;
+	int			i;
+	t_philo		*current;
+
 
 	data->threads_created = 0;
 	data->start_time = (((get_time_us()) / 1000) * 1000);
@@ -43,6 +44,12 @@ int	create_threads(t_data *data)
 			return (0);
 		current = current->next;
 	}
+	data->meal_monitor_thread = create_meal_thread(data);
+	if (!data->meal_monitor_thread)
+		return (0);
+	data->death_monitor_thread = create_death_thread(data);
+	if (!data->death_monitor_thread)
+		return (0);
 	pthread_mutex_unlock(&data->start_mutex);
 	return (1);
 }
@@ -85,8 +92,6 @@ void	free_threads(t_data *data)
 
 void	initialize_threads(t_data *data)
 {
-	pthread_t	death_monitor_thread;
-	pthread_t	meal_monitor_thread;
 	t_philo		*current;
 	t_philo		*last;
 
@@ -98,16 +103,10 @@ void	initialize_threads(t_data *data)
 		return ;
 	if (!create_threads(data))
 		return ;
-	meal_monitor_thread = create_meal_thread(data);
-	if (!meal_monitor_thread)
-		return ;
-	death_monitor_thread = create_death_thread(data);
-	if (!death_monitor_thread)
-		return ;
 	join_threads(data);
 	if (data->num_philo > 1)
-		pthread_join(death_monitor_thread, NULL);
+		pthread_join(data->death_monitor_thread, NULL);
 	if (data->has_to_eat_x > 0)
-		pthread_join(meal_monitor_thread, NULL);
+		pthread_join(data->meal_monitor_thread, NULL);
 	free_threads(data);
 }
