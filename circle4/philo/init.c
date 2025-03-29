@@ -6,36 +6,87 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:46:43 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 11:49:36 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	input_handle(int argc, char **argv, int temp)
+int	validate_arg_positive(int argc, char **argv)
 {
-	int				i;
-	char			*str;
+	(void) argc;
 
-	i = 1;
+	if (ft_atoi(argv[1]) < 1)
+	{
+		printf("Less than 1 philo not possible\n");
+		return (0);
+	}
+	if (ft_atoi(argv[2]) < 1 || ft_atoi(argv[3]) < 1 || ft_atoi(argv[4]) < 1)
+	{
+		printf("Less than 1 time to X is impossible\n");
+		return (0);
+	}
+	if (argc == 6 && ft_atoi(argv[5]) < 1)
+	{
+		printf("Less than 1 eat amount impossible\n");
+		return (0);
+	}
+	return (1);
+}
+
+int	validate_arg_count(int argc)
+{
 	if (argc < 5)
 	{
 		printf("not enough args\n");
-		return (1);
+		return (0);
 	}
+	else if (argc > 6)
+	{
+		printf("too many args\n");
+		return (0);
+	}
+	return (1);
+}
+
+int	is_valid_number(char *arg)
+{
+	int		temp;
+	char	*converted_str;
+
+	temp = ft_atoi(arg);
+	converted_str = ft_itoa(temp);
+	if (!converted_str)
+		return (0);
+
+	if (ft_strcmp(converted_str, arg) != 0)
+	{
+		free(converted_str);
+		return (0);
+	}
+	free(converted_str);
+	return (1);
+}
+
+int	input_handle(int argc, char **argv, int temp)
+{
+	int	i;
+
+	i = 1;
+	if (!validate_arg_count(argc))
+		return (1);
+	if (!validate_arg_positive(argc, argv))
+		return (1);
+
+
 	while (i < argc)
 	{
-		temp = ft_atoi(argv[i]);
-		str = ft_itoa(temp);
-		if (!str)
-			return (0);
-		if (ft_strcmp(str, argv[i]) != 0)
+		if (!is_valid_number(argv[i]))
 		{
 			printf("use proper numbers, friend\n");
-			free (str);
 			return (1);
 		}
-		free (str);
+		temp = ft_atoi(argv[i]);
 		i++;
 	}
 	return (0);

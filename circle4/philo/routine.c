@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:46:28 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 11:53:30 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ int	one_philo(t_data *data, t_philo *philo)
 		precise_sleep(data, data->time_to_die);
 		pthread_mutex_unlock(philo->left_fork);
 		printf("%lu 1 died\n", curr_time(data)/1000);
+		pthread_mutex_lock(&data->died_mutex);
+		data->someone_died = 1;
+		pthread_mutex_unlock(&data->died_mutex);
 		return (0);
 	}
 	return (1);
@@ -48,7 +51,9 @@ void	handle_philosopher_cycle(t_data *data, t_philo *philo)
 		precise_sleep(data, data->time_to_eat * 2 - data->time_to_sleep);
 	p_take_fork(data, philo);
 	p_eat(data, philo);
+//	pthread_mutex_lock(&philo->meal_mutex);
 	philo->ate_x++;
+//	pthread_mutex_unlock(&philo->meal_mutex);
 	p_release_fork(philo);
 	p_sleep(data, philo);
 }
