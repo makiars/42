@@ -24,13 +24,16 @@ int	check_all_philosophers_ate(t_data *data)
 	while (i < data->num_philo)
 	{
 		pthread_mutex_lock(&data->died_mutex);
+		pthread_mutex_lock(&p->meal_mutex);
 		if (p->ate_x < data->has_to_eat_x)
 		{
 			all_ate = 0;
 			pthread_mutex_unlock(&data->died_mutex);
+			pthread_mutex_unlock(&p->meal_mutex);
 			break ;
 		}
 		pthread_mutex_unlock(&data->died_mutex);
+		pthread_mutex_unlock(&p->meal_mutex);
 		i++;
 		p = p->next;
 		usleep(1000);

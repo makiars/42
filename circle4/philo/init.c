@@ -92,9 +92,9 @@ int	init_core(t_data *data, int argc, char **argv)
 
 	if (input_handle(argc, argv))
 		return (1);
-	if(pthread_mutex_init(&data->died_mutex, NULL) != 0)
-		return (1); 
-	if(pthread_mutex_init(&data->print_mutex, NULL) != 0)
+	if (pthread_mutex_init(&data->died_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (1);
 	data->num_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]) * 1000;
