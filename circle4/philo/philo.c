@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 08:46:43 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 11:00:45 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	check_if_died(t_data *data)
 {
 	int	terminated;
 
-	terminated = data->someone_died;
 	pthread_mutex_lock(&data->died_mutex);
 	terminated = data->someone_died;
 	pthread_mutex_unlock(&data->died_mutex);
