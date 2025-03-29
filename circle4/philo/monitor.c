@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 16:29:22 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:53:31 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,18 @@ int	check_all_philosophers_ate(t_data *data)
 	return (all_ate);
 }
 
+int	check_someone_died(t_data *data)
+{
+	pthread_mutex_lock(&data->died_mutex);
+	if (data->someone_died)
+	{
+		pthread_mutex_unlock(&data->died_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->died_mutex);
+	return (0);
+}
+
 void	*meal_monitor(void *arg)
 {
 	t_data	*data;
@@ -48,21 +60,11 @@ void	*meal_monitor(void *arg)
 			pthread_mutex_unlock(&data->died_mutex);
 			break ;
 		}
+		if (check_someone_died(data))
+			break ;
 		usleep(1000);
 	}
 	return (NULL);
-}
-
-int	check_someone_died(t_data *data)
-{
-	pthread_mutex_lock(&data->died_mutex);
-	if (data->someone_died)
-	{
-		pthread_mutex_unlock(&data->died_mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(&data->died_mutex);
-	return (0);
 }
 
 int	check_philosopher_death(t_data *data, t_philo *curr)

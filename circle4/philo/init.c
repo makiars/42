@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 16:35:10 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:46:43 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	input_handle(int argc, char **argv, int temp)
 	i = 1;
 	if (argc < 5)
 	{
-		ft_printf("not enough args\n");
+		printf("not enough args\n");
 		return (1);
 	}
 	while (i < argc)
@@ -29,9 +29,9 @@ int	input_handle(int argc, char **argv, int temp)
 		str = ft_itoa(temp);
 		if (!str)
 			return (0);
-		if (strcmp(str, argv[i]) != 0)
+		if (ft_strcmp(str, argv[i]) != 0)
 		{
-			ft_printf("use proper numbers, friend\n");
+			printf("use proper numbers, friend\n");
 			free (str);
 			return (1);
 		}

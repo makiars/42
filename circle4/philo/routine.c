@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 17:26:36 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:46:28 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ int	one_philo(t_data *data, t_philo *philo)
 {
 	if (data->num_philo == 1)
 	{
-		print_state(data, philo->id, TAKEN_FORK);
+		printf("%lu 1 is thinking\n", curr_time(data)/1000);
+		pthread_mutex_lock(philo->left_fork);
+		printf("%lu 1 has taken a fork\n", curr_time(data)/1000);
 		precise_sleep(data, data->time_to_die);
+		pthread_mutex_unlock(philo->left_fork);
+		printf("%lu 1 died\n", curr_time(data)/1000);
 		return (0);
 	}
 	return (1);

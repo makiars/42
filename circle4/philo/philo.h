@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 17:00:38 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:47:36 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "pthread.h"
 # include "sys/time.h"
 # include "stdint.h"
-# include "./ft_printf/ft_printf.h"
 
 # define TAKEN_FORK	1
 # define EATING	2
@@ -80,5 +79,6 @@ int			init_philo(t_data *data, t_philo *current, t_philo *last);
 void		p_take_fork(t_data *data, t_philo *philo);
 void		p_eat(t_data *data, t_philo *philo);
 void		p_sleep(t_data *data, t_philo *philo);
+int			ft_strcmp(const char *s1, const char *s2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:25:11 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/27 16:26:54 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:29:19 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,18 @@ void	free_double_array(char **array)
 	}
 	free(array);
 }
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	unsigned long	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
