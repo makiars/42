@@ -16,17 +16,17 @@ int	validate_arg_positive(int argc, char **argv)
 {
 	if (ft_atoi(argv[1]) < 1)
 	{
-		printf("Less than 1 philo not possible\n");
+		printf("invalid philo input\n");
 		return (0);
 	}
 	if (ft_atoi(argv[2]) < 1 || ft_atoi(argv[3]) < 1 || ft_atoi(argv[4]) < 1)
 	{
-		printf("Less than 1 time to X is impossible\n");
+		printf("invalid \"time to X\"\n");
 		return (0);
 	}
 	if (argc == 6 && ft_atoi(argv[5]) < 1)
 	{
-		printf("Less than 1 eat amount impossible\n");
+		printf("invalid amount to eat\n");
 		return (0);
 	}
 	return (1);

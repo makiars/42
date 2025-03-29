@@ -28,7 +28,7 @@ t_data	*address_getter(t_data *data)
 void	print_state(t_data *data, int philo, int state)
 {
 	pthread_mutex_lock(&data->died_mutex);
-	if (data->someone_died && state != DIED)
+	if ((data->someone_died && state != DIED))
 	{
 		pthread_mutex_unlock(&data->died_mutex);
 		return ;
