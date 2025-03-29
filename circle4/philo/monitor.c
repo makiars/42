@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 12:35:01 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:21:10 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,33 +75,45 @@ void	*meal_monitor(void *arg)
 	return (NULL);
 }
 
-int	check_philosopher_death(t_data *data, t_philo *curr)
+// Optimized version of check_philosopher_death
+int check_philosopher_death(t_data *data, t_philo *head)
 {
-	uint64_t	now;
+    t_philo    *curr;
+    uint64_t    now;
+    uint64_t    last;
+    int         i;
 
-	while (curr)
-	{
-		now = curr_time(data);
-		pthread_mutex_lock(&curr->meal_mutex);
-		if (now - curr->last_eaten >= data->time_to_die)
-		{
-			pthread_mutex_unlock(&curr->meal_mutex);
-			pthread_mutex_lock(&data->died_mutex);
-			if (!data->someone_died)
-			{
-				data->someone_died = 1;
-				pthread_mutex_lock(&data->print_mutex);
-				printf("%lu %d died\n", now / 1000, curr->id);
-				pthread_mutex_unlock(&data->print_mutex);
-			}
-			pthread_mutex_unlock(&data->died_mutex);
-			return (1);
-		}
-		pthread_mutex_unlock(&curr->meal_mutex);
-		curr = curr->next;
-	}
-	return (0);
+    curr = head;
+    // Get current time once. This uses get_time_us() directly and subtracts the start time.
+    now = get_time_us() - data->start_time;
+    // Iterate over all philosophers
+    for (i = 0; i < data->num_philo; i++)
+    {
+        // Lock the philosopher's meal_mutex to read last_eaten safely
+        pthread_mutex_lock(&curr->meal_mutex);
+        last = curr->last_eaten;
+        pthread_mutex_unlock(&curr->meal_mutex);
+
+        // Check if the time difference exceeds the allowed time to die
+        if (now - last >= data->time_to_die)
+        {
+            pthread_mutex_lock(&data->died_mutex);
+            if (!data->someone_died)
+            {
+                data->someone_died = 1;
+                pthread_mutex_lock(&data->print_mutex);
+                // Use now computed earlier to print the death time
+                printf("%lu %d died\n", now / 1000, curr->id);
+                pthread_mutex_unlock(&data->print_mutex);
+            }
+            pthread_mutex_unlock(&data->died_mutex);
+            return 1;
+        }
+        curr = curr->next;
+    }
+    return 0;
 }
+
 
 void	*death_monitor(void *arg)
 {
