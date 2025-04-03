@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/04/01 18:41:18 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:36:37 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,43 +69,18 @@ int	malloc_and_init_mutex(t_data *data)
 
 int	create_threads(t_data *data)
 {
-	int			i;
-	t_philo		*current;
+	int	created_threads;
 
-	data->threads_created = 0;
-	data->start_time = (((get_time_us()) / 1000) * 1000);
-	current = data->philo_head;
-	pthread_mutex_lock(&data->start_mutex);
-	i = -1;
-	while (++i < data->num_philo)
+	created_threads = initialize_philosopher_threads(data);
+	if (created_threads != -1)
 	{
-		if (pthread_create(&current->thread, NULL,
-				philosopher_routine, current) != 0)
-		{
-			pthread_mutex_unlock(&data->start_mutex);
-			while (i-- > 0)
-			{
-				current = data->philo_head;
-				pthread_join(current->thread, NULL);
-				current = current->next;
-			}
-			destroy_mutex(data);
-			return (0);
-		}
-		current = current->next;
-	}
-	data->meal_monitor_thread = create_meal_thread(data);
-	if (!data->meal_monitor_thread)
-	{
-		pthread_mutex_unlock(&data->start_mutex);
-		join_threads(data);
-		destroy_mutex(data);
+		cleanup_failed_threads(data, created_threads);
 		return (0);
 	}
-	data->death_monitor_thread = create_death_thread(data);
-	if (!data->death_monitor_thread)
+	if (!create_monitor_threads(data))
 	{
 		pthread_mutex_unlock(&data->start_mutex);
+		pthread_join(data->meal_monitor_thread, NULL);
 		join_threads(data);
 		destroy_mutex(data);
 		return (0);

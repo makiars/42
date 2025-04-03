@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 19:06:18 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:00:18 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	*philosopher_routine(void *arg)
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_eaten = curr_time(data);
 	pthread_mutex_unlock(&philo->meal_mutex);
+	if (data->threads_created == 0)
+		return (NULL);
 	while (1)
 	{
 		if (check_death_condition(data))

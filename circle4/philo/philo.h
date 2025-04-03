@@ -6,7 +6,7 @@
 /*   By: marsenij <marsenij@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:06:02 by marsenij          #+#    #+#             */
-/*   Updated: 2025/03/29 19:15:46 by marsenij         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:32:47 by marsenij         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int			check_if_died(t_data *data);
 void		p_release_fork(t_philo *philo);
 void		*death_monitor(void *arg);
 void		*meal_monitor(void *arg);
-pthread_t	create_death_thread(t_data *data);
-pthread_t	create_meal_thread(t_data *data);
+int			create_philosopher_threads(t_data *data);
+int			create_monitor_threads(t_data *data);
 int			init_philo(t_data *data, t_philo *current, t_philo *last);
 void		p_take_fork(t_data *data, t_philo *philo);
 void		p_eat(t_data *data, t_philo *philo);
@@ -84,5 +84,9 @@ void		p_sleep(t_data *data, t_philo *philo);
 int			ft_strcmp(const char *s1, const char *s2);
 int			check_someone_died(t_data *data);
 int			init_core(t_data *data, int argc, char **argv);
+int			initialize_philosopher_threads(t_data *data);
+void		cleanup_failed_threads(t_data *data, int created_threads);
+int			create_monitor_threads(t_data *data);
+void		destroy_mutex(t_data *data);
 
 #endif
